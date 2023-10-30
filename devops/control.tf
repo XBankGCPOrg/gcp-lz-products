@@ -32,7 +32,7 @@ module "control_kms_key" {
 
 module "state_files" {
   source              = "github.com/XBankGCPOrg/gcp-lz-modules//storage/bucket?ref=main"
-  name                = var.gcs_terraform_bucket_name
+  name                = "bkt-${module.projects.project_id}-${var.gcs_terraform_bucket_name}"
   project             = module.projects.project_id
   location            = var.location
   data_classification = "terraform_state"

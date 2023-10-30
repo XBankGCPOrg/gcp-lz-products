@@ -61,7 +61,7 @@ module "guardrails_kms_key" {
 
 module "guardrails_storage" {
   source              = "github.com/XBankGCPOrg/gcp-lz-modules//storage/bucket?ref=v0.0.1"
-  name                = "guardrails"
+  name                = "bkt-${module.projects[var.project_guardrails].project_id}-guardrails"
   project             = module.projects[var.project_guardrails].project_id
   location            = var.location
   kms_key_id          = module.guardrails_kms_key.key_id
