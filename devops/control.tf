@@ -22,8 +22,7 @@ module "control_kms_key" {
   name            = module.projects.project_id
   key_ring_name   = module.projects.project_id
   project         = module.projects.project_id
-  prevent_destroy = true     #this will prevent kms get destroyed during terraform destroy
-  rotation_period = "86400s" #key rotation is set to 90 days
+  rotation_period = "7776000s" #key rotation is set to 90 days
   location        = var.location
   encrypters      = local.control_encrypters
   decrypters      = local.control_encrypters
@@ -32,7 +31,7 @@ module "control_kms_key" {
 }
 
 module "state_files" {
-  source              = "github.com/XBankGCPOrg/gcp-lz-modules//storage/bucket?ref=v0.0.1"
+  source              = "github.com/XBankGCPOrg/gcp-lz-modules//storage/bucket?ref=main"
   name                = var.gcs_terraform_bucket_name
   project             = module.projects.project_id
   location            = var.location

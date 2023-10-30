@@ -34,15 +34,14 @@ data "google_storage_project_service_account" "logging_gcs_account" {
 }
 
 module "logging_kms_key" {
-  source        = "github.com/XBankGCPOrg/gcp-lz-modules//kms/key?ref=v0.0.1"
-  name          = module.projects[var.project_logging].project_id
-  key_ring_name = module.projects[var.project_logging].project_id
-  project       = module.projects[var.project_logging].project_id
-  location      = var.location
-  prevent_destroy = true       #this will prevent kms get destroyed during terraform destroy
-  rotation_period = "86400s" #key rotation is set to 90 days
-  encrypters    = local.logging_encrypters
-  decrypters    = local.logging_encrypters
+  source          = "github.com/XBankGCPOrg/gcp-lz-modules//kms/key?ref=v0.0.1"
+  name            = module.projects[var.project_logging].project_id
+  key_ring_name   = module.projects[var.project_logging].project_id
+  project         = module.projects[var.project_logging].project_id
+  location        = var.location
+  rotation_period = "7776000s" #key rotation is set to 90 days
+  encrypters      = local.logging_encrypters
+  decrypters      = local.logging_encrypters
 }
 
 # No filter on this log sink ensures all logs are forwarded to the storage bucket
