@@ -39,6 +39,8 @@ module "logging_kms_key" {
   key_ring_name = module.projects[var.project_logging].project_id
   project       = module.projects[var.project_logging].project_id
   location      = var.location
+  prevent_destroy = true       #this will prevent kms get destroyed during terraform destroy
+  rotation_period = "86400s" #key rotation is set to 90 days
   encrypters    = local.logging_encrypters
   decrypters    = local.logging_encrypters
 }

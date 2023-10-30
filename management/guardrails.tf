@@ -54,6 +54,8 @@ module "guardrails_kms_key" {
   key_ring_name = module.projects[var.project_guardrails].project_id
   project       = module.projects[var.project_guardrails].project_id
   location      = var.location
+  prevent_destroy = true       #this will prevent kms get destroyed during terraform destroy
+  rotation_period = "86400s" #key rotation is set to 90 days
   encrypters    = local.guardrails_encrypters
   decrypters    = local.guardrails_encrypters
 }
