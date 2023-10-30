@@ -22,8 +22,8 @@ module "control_kms_key" {
   name            = module.projects.project_id
   key_ring_name   = module.projects.project_id
   project         = module.projects.project_id
-  prevent_destroy = true       #this will prevent kms get destroyed during terraform destroy
-  rotation_period = "7776000s" #key rotation is set to 90 days
+  prevent_destroy = true    #this will prevent kms get destroyed during terraform destroy
+  rotation_period = "3600s" #key rotation is set to 90 days
   location        = var.location
   encrypters      = local.control_encrypters
   decrypters      = local.control_encrypters
