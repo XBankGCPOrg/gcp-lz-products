@@ -18,13 +18,15 @@ data "google_storage_project_service_account" "control_gcs_account" {
 }
 
 module "control_kms_key" {
-  source        = "github.com/XBankGCPOrg/gcp-lz-modules//kms/key?ref=v0.0.1"
-  name          = module.projects.project_id
-  key_ring_name = module.projects.project_id
-  project       = module.projects.project_id
-  location      = var.location
-  encrypters    = local.control_encrypters
-  decrypters    = local.control_encrypters
+  source          = "github.com/XBankGCPOrg/gcp-lz-modules//kms/key?ref=v0.0.1"
+  name            = module.projects.project_id
+  key_ring_name   = module.projects.project_id
+  project         = module.projects.project_id
+  prevent_destroy = true       #this will prevent kms get destroyed during terraform destroy
+  rotation_period = "7776000s" #key rotation is set to 90 days
+  location        = var.location
+  encrypters      = local.control_encrypters
+  decrypters      = local.control_encrypters
 
   depends_on = [module.projects]
 }
