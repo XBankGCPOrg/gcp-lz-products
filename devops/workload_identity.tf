@@ -2,9 +2,9 @@ resource "google_iam_workload_identity_pool" "github" {
   for_each                  = { for sa in var.service_accounts.service_accounts : sa.name => sa }
   provider                  = google-beta
   project                   = module.projects.project_id
-  workload_identity_pool_id = "github-${each.key}-pool"
-  display_name              = "Github-${each.key}-pool"
-  description               = "Github ${each.key} workload identity pool"
+  workload_identity_pool_id = "github-b-${each.key}-pool"
+  display_name              = "Github-b-${each.key}-pool"
+  description               = "Github ${each.key} workload identity pool for bootstrap env"
 }
 
 resource "google_iam_workload_identity_pool_provider" "github" {
@@ -12,9 +12,9 @@ resource "google_iam_workload_identity_pool_provider" "github" {
   for_each                           = { for sa in var.service_accounts.service_accounts : sa.name => sa }
   project                            = module.projects.project_id
   workload_identity_pool_id          = google_iam_workload_identity_pool.github[each.key].workload_identity_pool_id
-  workload_identity_pool_provider_id = "github-${each.key}-provider"
-  display_name                       = "Github-${each.key}-provider"
-  description                        = "Github ${each.key} workload identity pool provider"
+  workload_identity_pool_provider_id = "github-b-${each.key}-provider"
+  display_name                       = "Github-b-${each.key}-provider"
+  description                        = "Github ${each.key} workload identity pool provider for bootstrap env"
   attribute_mapping = {
     "google.subject"       = "assertion.sub"
     "attribute.actor"      = "assertion.actor"
