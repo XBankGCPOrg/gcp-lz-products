@@ -9,6 +9,6 @@ output "project_ids" {
 }
 output "lien_name" {
   value = {
-    for entry in var.foundation_hierarchy.projects : entry.displayName => google_resource_manager_lien.lien[entry.displayName].name if length(entry.lienReason) > 0
+    for entry in var.foundation_hierarchy.projects : entry.displayName => google_resource_manager_lien.lien[entry.displayName].name if entry.lienReason != null
   }
 }

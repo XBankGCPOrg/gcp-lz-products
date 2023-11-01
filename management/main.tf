@@ -29,7 +29,7 @@ module "projects" {
 }
 
 resource "google_resource_manager_lien" "lien" {
-  for_each = { for entry in var.foundation_hierarchy.projects : entry.displayName => entry if length(entry.lienReason) > 0 }
+  for_each = { for entry in var.foundation_hierarchy.projects : entry.displayName => entry if entry.lienReason != null }
   parent   = "projects/${module.projects[each.key].number}"
 
   restrictions = ["resourcemanager.projects.delete"]
