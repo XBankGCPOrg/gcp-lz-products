@@ -86,7 +86,7 @@ module "log_sink_filtered_to_bigquery" {
 
 module "log_bigquery" {
   source     = "github.com/XBankGCPOrg/gcp-lz-modules//bigquery/dataset?ref=main"
-  name       = "bq-${module.projects[var.project_logging].project_id}"
+  name       = "bq_${replace(module.projects[var.project_logging].project_id, "-", "_")}"
   project    = module.projects[var.project_logging].project_id
   location   = var.location
   kms_key_id = module.logging_kms_key.key_id
