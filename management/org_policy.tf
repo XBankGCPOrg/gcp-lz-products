@@ -2,17 +2,17 @@ locals {
 
   organization_policies = flatten([
     for policy in var.org_policy.orgPolicy :
-    { policy = policy } if try(policy.exists, false) != true
+    { policy = policy } if try(policy.spec.exists, false) != true
   ])
 
   folder_policies = flatten([
     for folder in var.org_policy.folders : { parent = folder.parent, policy = flatten([for policy in folder.orgPolicy :
-      { policy = policy } if try(policy.exists, false) != true
+      { policy = policy } if try(policy.spec.exists, false) != true
   ]) }])
 
   project_policies = flatten([
     for project in var.org_policy.projects : { parent = project.parent, policy = flatten([for policy in project.orgPolicy :
-      { policy = policy } if try(policy.exists, false) != true
+      { policy = policy } if try(policy.spec.exists, false) != true
   ]) }])
 }
 
