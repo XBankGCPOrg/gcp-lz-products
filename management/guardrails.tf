@@ -118,7 +118,7 @@ module "guardrails_pubsub_log_topic" {
 resource "google_pubsub_topic_iam_member" "guardrails_pubsub_sink_member" {
   for_each = local.log_sinks
   project  = module.projects[var.project_guardrails].project_id
-  topic    = "guardrail-${each.value.topic}"
+  topic    = "ps-${module.projects[var.project_guardrails].project_id}-guardrail-${each.value.topic}"
   role     = "roles/pubsub.publisher"
   member   = module.guardrails_log_sink[each.key].writer_identity
 }
