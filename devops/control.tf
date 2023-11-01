@@ -19,7 +19,7 @@ data "google_storage_project_service_account" "control_gcs_account" {
 
 module "control_kms_key" {
   source                     = "github.com/XBankGCPOrg/gcp-lz-modules//kms/key?ref=main"
-  name                       = "${module.projects.project_id}-new"
+  name                       = "${module.projects.project_id}-new1"
   key_ring_name              = module.projects.project_id
   project                    = module.projects.project_id
   rotation_period            = "7776000s" #key rotation is set to 90 days
