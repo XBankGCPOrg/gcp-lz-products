@@ -7,7 +7,7 @@ locals {
 }
 
 module "organization" {
-  source = "github.com/XBankGCPOrg/gcp-lz-modules//resources/organization?ref=v0.0.1"
+  source = "github.com/XBankGCPOrg/gcp-lz-modules//resources/organization?ref=main"
   domain = var.domain
 }
 
@@ -18,7 +18,7 @@ module "folders" {
 }
 
 module "projects" {
-  source   = "github.com/XBankGCPOrg/gcp-lz-modules//resources/project?ref=v0.0.1"
+  source   = "github.com/XBankGCPOrg/gcp-lz-modules//resources/project?ref=main"
   for_each = { for entry in var.foundation_hierarchy.projects : entry.displayName => entry }
 
   name            = each.value.displayName

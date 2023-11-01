@@ -38,7 +38,7 @@ locals {
 }
 
 module "guardrails_service_identity" {
-  source   = "github.com/XBankGCPOrg/gcp-lz-modules//resources/service_identity?ref=v0.0.1"
+  source   = "github.com/XBankGCPOrg/gcp-lz-modules//resources/service_identity?ref=main"
   for_each = toset(local.guardrails_services)
   project  = module.projects[var.project_guardrails].project_id
   service  = each.value
@@ -49,7 +49,7 @@ data "google_storage_project_service_account" "guardrails_gcs_account" {
 }
 
 module "guardrails_kms_key" {
-  source          = "github.com/XBankGCPOrg/gcp-lz-modules//kms/key?ref=v0.0.1"
+  source          = "github.com/XBankGCPOrg/gcp-lz-modules//kms/key?ref=main"
   name            = module.projects[var.project_guardrails].project_id
   key_ring_name   = module.projects[var.project_guardrails].project_id
   project         = module.projects[var.project_guardrails].project_id
@@ -60,7 +60,7 @@ module "guardrails_kms_key" {
 }
 
 module "guardrails_storage" {
-  source              = "github.com/XBankGCPOrg/gcp-lz-modules//storage/bucket?ref=v0.0.1"
+  source              = "github.com/XBankGCPOrg/gcp-lz-modules//storage/bucket?ref=main"
   name                = "bkt-${module.projects[var.project_guardrails].project_id}-guardrails"
   project             = module.projects[var.project_guardrails].project_id
   location            = var.location
@@ -83,9 +83,9 @@ resource "google_storage_bucket_object" "guardrails" {
 }
 
 module "guardrails_artifact_registry" {
-  source = "github.com/XBankGCPOrg/gcp-lz-modules//devops/artifact_registry?ref=v0.0.1"
+  source = "github.com/XBankGCPOrg/gcp-lz-modules//devops/artifact_registry?ref=main"
 
-  name        = "guardrails"
+  name        = "ar-${module.projects[var.project_guardrails].project_id}-guardrails"
   description = "Docker containers for guardrail cloudfunctions"
   project     = module.projects[var.project_guardrails].project_id
   location    = var.location
@@ -96,9 +96,9 @@ module "guardrails_artifact_registry" {
 }
 
 module "guardrails_log_sink" {
-  source           = "github.com/XBankGCPOrg/gcp-lz-modules//log_sink?ref=v0.0.1"
+  source           = "github.com/XBankGCPOrg/gcp-lz-modules//log_sink?ref=main"
   for_each         = local.log_sinks
-  name             = "guardrail-${each.value.name}"
+  name             = "ls-b-guardrail-${each.value.name}"
   org_id           = local.organization_id
   include_children = true
   destination      = "pubsub.googleapis.com/projects/${module.projects[var.project_guardrails].project_id}/topics/${module.guardrails_pubsub_log_topic[each.value.topic].name}"
@@ -106,9 +106,9 @@ module "guardrails_log_sink" {
 }
 
 module "guardrails_pubsub_log_topic" {
-  source     = "github.com/XBankGCPOrg/gcp-lz-modules//pubsub/topic?ref=v0.0.1"
+  source     = "github.com/XBankGCPOrg/gcp-lz-modules//pubsub/topic?ref=main"
   for_each   = local.guardrails
-  name       = "guardrail-${each.value.log_topic}"
+  name       = "ps-${module.projects[var.project_guardrails].project_id}-guardrail-${each.value.log_topic}"
   project    = module.projects[var.project_guardrails].project_id
   kms_key_id = module.guardrails_kms_key.key_id
 
@@ -124,7 +124,7 @@ resource "google_pubsub_topic_iam_member" "guardrails_pubsub_sink_member" {
 }
 
 module "service_account" {
-  source   = "github.com/XBankGCPOrg/gcp-lz-modules//iam/service_account?ref=v0.0.1"
+  source   = "github.com/XBankGCPOrg/gcp-lz-modules//iam/service_account?ref=main"
   for_each = local.guardrails
 
   name         = "sa-guardrail-${each.value.name}"
@@ -134,12 +134,12 @@ module "service_account" {
 }
 
 module "guardrails_cloudfunction" {
-  source   = "github.com/XBankGCPOrg/gcp-lz-modules//compute/cloudfunction?ref=v0.0.1"
+  source   = "github.com/XBankGCPOrg/gcp-lz-modules//compute/cloudfunction?ref=main"
   for_each = local.guardrails
   project  = module.projects[var.project_guardrails].project_id
   location = var.location
 
-  name        = "guardrail-${each.value.name}"
+  name        = "cfn-${module.projects[var.project_guardrails].project_id}-guardrail-${each.value.name}"
   description = "Guardrail for ${each.value.name}"
   runtime     = "python311"
 
@@ -161,11 +161,10 @@ module "guardrails_cloudfunction" {
 }
 
 module "guardrail_pubsub_topic_alerts" {
-  source     = "github.com/XBankGCPOrg/gcp-lz-modules//pubsub/topic?ref=v0.0.1"
-  name       = "guardrails-alert"
+  source     = "github.com/XBankGCPOrg/gcp-lz-modules//pubsub/topic?ref=main"
+  name       = "ps-${module.projects[var.project_guardrails].project_id}-guardrails-alert"
   project    = module.projects[var.project_guardrails].project_id
   kms_key_id = module.guardrails_kms_key.key_id
 
   depends_on = [module.guardrails_kms_key.encrypters]
 }
-
