@@ -47,16 +47,16 @@ variable "iam_policy" {
     organizations = list(object({
       name = string
       iamPolicy = optional(object({
-        bindings = list(object({
-          role    = string
-          members = list(string)
-        }))
+        bindings = optional(list(object({
+          role    = optional(string)
+          members = optional(list(string))
+        })), [])
       }), {})
       roles = optional(list(object({
-        name                = string
-        title               = string
-        description         = string
-        includedPermissions = list(string)
+        name                = optional(string)
+        title               = optional(string)
+        description         = optional(string)
+        includedPermissions = optional(list(string))
       })), [])
     }))
     folders = list(object({
@@ -71,16 +71,16 @@ variable "iam_policy" {
     projects = list(object({
       name = string
       iamPolicy = optional(object({
-        bindings = list(object({
-          role    = string
-          members = list(string)
-        }))
+        bindings = optional(list(object({
+          role    = optional(string)
+          members = optional(list(string))
+        })), [])
       }), {})
       roles = optional(list(object({
-        name                = string
-        title               = string
-        description         = string
-        includedPermissions = list(string)
+        name                = optional(string)
+        title               = optional(string)
+        description         = optional(string)
+        includedPermissions = optional(list(string))
       })), [])
     }))
     service_accounts = list(object({
