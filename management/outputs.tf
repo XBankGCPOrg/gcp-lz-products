@@ -12,3 +12,9 @@ output "lien_name" {
     for entry in var.foundation_hierarchy.projects : entry.displayName => google_resource_manager_lien.lien[entry.displayName].name if entry.lienReason != null
   }
 }
+
+output "service_accounts" {
+  value = {
+    for entry in var.foundation_hierarchy.projects : entry.displayName => [for sa in local.service_accounts : module.service_accounts["${sa.name}@${sa.project}"].id]
+  }
+}

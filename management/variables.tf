@@ -21,11 +21,17 @@ variable "foundation_hierarchy" {
       parent      = string
     }))
     projects = list(object({
-      displayName = string
-      parent      = string
-      services    = list(string)
-      labels      = map(string)
-      lienReason  = optional(string)
+      displayName        = string
+      parent             = string
+      services           = list(string)
+      labels             = map(string)
+      lienReason         = optional(string)
+      service_identities = optional(list(string))
+      service_accounts = optional(list(object({
+        name        = string
+        displayName = string
+        description = string
+      })))
     }))
   })
 
@@ -46,6 +52,12 @@ variable "iam_policy" {
           members = list(string)
         }))
       })
+      roles = optional(list(object({
+        name                = string
+        title               = string
+        description         = string
+        includedPermissions = list(string)
+      })))
     }))
     folders = list(object({
       name = string
@@ -57,6 +69,21 @@ variable "iam_policy" {
       })
     }))
     projects = list(object({
+      name = string
+      iamPolicy = object({
+        bindings = list(object({
+          role    = string
+          members = list(string)
+        }))
+      })
+      roles = optional(list(object({
+        name                = string
+        title               = string
+        description         = string
+        includedPermissions = list(string)
+      })))
+    }))
+    service_accounts = list(object({
       name = string
       iamPolicy = object({
         bindings = list(object({
