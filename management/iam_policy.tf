@@ -102,7 +102,7 @@ resource "google_organization_iam_member" "organization" {
 
   org_id = module.organization.org_id
   role   = regex(local.regex_role, each.value.role).type == "roles" ? each.value.role : google_organization_iam_custom_role.organization[regex(local.regex_role, each.value.role).name].name
-  member = strcontains(each.value.member, "=>") ? startswith(each.value.member, "serviceAccount") ? module.service_accounts[split("=>", each.value.member).1].member : "serviceAccount:${module.service_identity[split("=>", each.value.member).1].email}" : each.value.member
+  member = strcontains(each.value.member, "=>") ? startswith(each.value.member, "serviceAccount") ? "serviceAccount:${module.service_accounts[split("=>", each.value.member).1].member}" : "serviceAccount:${module.service_identity[split("=>", each.value.member).1].email}" : each.value.member
 }
 
 resource "google_folder_iam_member" "folder" {
@@ -110,7 +110,7 @@ resource "google_folder_iam_member" "folder" {
 
   folder = flatten([for folder in module.folders.folder_id : values(folder) if contains(keys(folder), each.value.folder_id)]).0
   role   = regex(local.regex_role, each.value.role).type == "roles" ? each.value.role : google_organization_iam_custom_role.organization[regex(local.regex_role, each.value.role).name].name
-  member = strcontains(each.value.member, "=>") ? startswith(each.value.member, "serviceAccount") ? module.service_accounts[split("=>", each.value.member).1].member : "serviceAccount:${module.service_identity[split("=>", each.value.member).1].email}" : each.value.member
+  member = strcontains(each.value.member, "=>") ? startswith(each.value.member, "serviceAccount") ? "serviceAccount:${module.service_accounts[split("=>", each.value.member).1].member}" : "serviceAccount:${module.service_identity[split("=>", each.value.member).1].email}" : each.value.member
 }
 
 resource "google_project_iam_member" "project" {
@@ -118,13 +118,13 @@ resource "google_project_iam_member" "project" {
 
   project = module.projects[each.value.project_id].project_id
   role    = regex(local.regex_role, each.value.role).type == "roles" ? each.value.role : regex(local.regex_role, each.value.role).type == "organization" ? google_organization_iam_custom_role.organization[regex(local.regex_role, each.value.role).name].name : google_project_iam_custom_role.project[regex(local.regex_role, each.value.role).name].name
-  member  = strcontains(each.value.member, "=>") ? startswith(each.value.member, "serviceAccount") ? module.service_accounts[split("=>", each.value.member).1].member : "serviceAccount:${module.service_identity[split("=>", each.value.member).1].email}" : each.value.member
+  member  = strcontains(each.value.member, "=>") ? startswith(each.value.member, "serviceAccount") ? "serviceAccount:${module.service_accounts[split("=>", each.value.member).1].email}" : "serviceAccount:${module.service_identity[split("=>", each.value.member).1].email}" : each.value.member
 }
 
 resource "google_service_account_iam_member" "service_account" {
   for_each = { for binding in local.service_account_bindings : "${binding.name}/${binding.role}/${binding.member}" => binding }
 
-  service_account_id = startswith(each.value.member, "serviceAccount") ? module.service_accounts[split("=>", each.value.member).1].id : each.value.member
+  service_account_id = startswith(each.value.name, "serviceAccount") ? module.service_accounts[split("=>", each.value.member).1].id : each.value.name
   role               = regex(local.regex_role, each.value.role).type == "roles" ? each.value.role : regex(local.regex_role, each.value.role).type == "organization" ? google_organization_iam_custom_role.organization[regex(local.regex_role, each.value.role).name].name : google_project_iam_custom_role.project[regex(local.regex_role, each.value.role).name].name
-  member             = strcontains(each.value.member, "=>") ? startswith(each.value.member, "serviceAccount") ? module.service_accounts[split("=>", each.value.member).1].member : "serviceAccount:${module.service_identity[split("=>", each.value.member).1].email}" : each.value.member
+  member             = strcontains(each.value.member, "=>") ? startswith(each.value.member, "serviceAccount") ? "serviceAccount:${module.service_accounts[split("=>", each.value.member).1].member}" : "serviceAccount:${module.service_identity[split("=>", each.value.member).1].email}" : each.value.member
 }
