@@ -1,5 +1,5 @@
 output "folder_ids" {
-  value = module.folders.folder_id
+  value = { for entry in module.folders.folder_id : keys(entry)[0] => values(entry)[0] }
 }
 
 output "project_ids" {
