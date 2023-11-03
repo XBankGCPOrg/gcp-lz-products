@@ -26,12 +26,12 @@ variable "foundation_hierarchy" {
       services           = list(string)
       labels             = map(string)
       lienReason         = optional(string)
-      service_identities = optional(list(string))
+      service_identities = optional(list(string), [])
       service_accounts = optional(list(object({
         name        = string
         displayName = string
         description = string
-      })))
+      })), [])
     }))
   })
 
