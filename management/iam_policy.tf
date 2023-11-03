@@ -9,7 +9,7 @@ locals {
         organization = org.name
         title        = role.title
         description  = role.description
-        permissions  = role.permissions
+        permissions  = role.includedPermissions
       }
     ]
   ])
@@ -21,7 +21,7 @@ locals {
         project     = project.name
         title       = role.title
         description = role.description
-        permissions = role.permissions
+        permissions = role.includedPermissions
       }
     ]
   ])
