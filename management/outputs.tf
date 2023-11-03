@@ -19,11 +19,11 @@ output "artifact_registry_name" {
 
 output "pub_sub_name" {
   value = [
-    module.guardrails_pubsub_log_topic.name,
+    module.guardrails_pubsub_log_topic[keys(local.guardrails)[0]].name,
     module.guardrail_pubsub_topic_alerts.name
   ]
 }
 
-output "guardrails_cloudfunction_name" {
-  value = module.guardrails_cloudfunction.name
-}
+# output "guardrails_cloudfunction_name" {
+#   value = module.guardrails_cloudfunction[keys(local.guardrails)[0]].google_cloudfunctions_function
+# }
