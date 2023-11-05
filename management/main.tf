@@ -18,6 +18,12 @@ locals {
       service = service_identity
     }
   ]])
+  default_services                 = ["storage.googleapis.com", "bigquery.googleapis.com", "compute.googleapis.com"]
+  default_compute_service_account  = { for entry in local.service_identities : "${entry.service}@${entry.project}" => data.google_compute_default_service_account.account["${entry.service}@${entry.project}"].email if contains(["compute.googleapis.com"], entry.service) }
+  default_storage_service_account  = { for entry in local.service_identities : "${entry.service}@${entry.project}" => data.google_storage_project_service_account.account["${entry.service}@${entry.project}"].email_address if contains(["storage.googleapis.com"], entry.service) }
+  default_bigquery_service_account = { for entry in local.service_identities : "${entry.service}@${entry.project}" => data.google_bigquery_default_service_account.account["${entry.service}@${entry.project}"].email if contains(["bigquery.googleapis.com"], entry.service) }
+  service_identity_service_account = { for entry in local.service_identities : "${entry.service}@${entry.project}" => module.service_identity["${entry.service}@${entry.project}"].email if contains(local.default_services, entry.service) == false }
+  combined_service_identity_email  = merge(local.default_compute_service_account, local.default_storage_service_account, local.default_bigquery_service_account, local.service_identity_service_account)
 }
 
 module "organization" {
@@ -63,7 +69,22 @@ module "service_accounts" {
 
 module "service_identity" {
   source   = "github.com/XBankGCPOrg/gcp-lz-modules//resources/service_identity?ref=main"
-  for_each = { for entry in local.service_identities : "${entry.service}@${entry.project}" => entry }
+  for_each = { for entry in local.service_identities : "${entry.service}@${entry.project}" => entry if contains(local.default_services, entry.service) == false }
   project  = module.projects[each.value.project].project_id
   service  = each.value.service
+}
+
+data "google_storage_project_service_account" "account" {
+  for_each = { for entry in local.service_identities : "${entry.service}@${entry.project}" => entry if contains(["storage.googleapis.com"], entry.service) }
+  project  = module.projects[each.value.project].project_id
+}
+
+data "google_bigquery_default_service_account" "account" {
+  for_each = { for entry in local.service_identities : "${entry.service}@${entry.project}" => entry if contains(["bigquery.googleapis.com"], entry.service) }
+  project  = module.projects[each.value.project].project_id
+}
+
+data "google_compute_default_service_account" "account" {
+  for_each = { for entry in local.service_identities : "${entry.service}@${entry.project}" => entry if contains(["compute.googleapis.com"], entry.service) }
+  project  = module.projects[each.value.project].project_id
 }
