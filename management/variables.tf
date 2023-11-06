@@ -138,6 +138,6 @@ variable "labels" {
 }
 
 variable "test_flag" {
-  type = bool
+  type    = bool
   default = false
 }

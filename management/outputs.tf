@@ -29,6 +29,6 @@ output "pub_sub_name" {
 # }
 output "service_accounts" {
   value = {
-    for entry in var.foundation_hierarchy.projects : entry.displayName => [for sa in local.service_accounts : module.service_accounts["${sa.name}@${sa.project}"].id]
+    for entry in var.foundation_hierarchy.projects : entry.displayName => compact([for sa in local.service_accounts : module.service_accounts["${sa.name}@${entry.displayName}"].id])
   }
 }
