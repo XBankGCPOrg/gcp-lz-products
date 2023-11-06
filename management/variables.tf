@@ -136,3 +136,8 @@ variable "labels" {
     # project-code              = "245924"
   }
 }
+
+variable "test_flag" {
+  type = bool
+  default = false
+}

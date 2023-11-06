@@ -47,7 +47,7 @@ module "logging_kms_key" {
 # No filter on this log sink ensures all logs are forwarded to the storage bucket
 module "log_sink_all_to_storage" {
   source           = "github.com/XBankGCPOrg/gcp-lz-modules//log_sink?ref=main"
-  name             = "ls-b-log-storage"
+  name             = var.test_flag ? "ls-b-log-storage-test" : "ls-b-log-storage"
   org_id           = local.organization_id
   include_children = true
   destination      = "storage.googleapis.com/${module.log_storage.name}"
@@ -73,7 +73,7 @@ resource "google_storage_bucket_iam_member" "storage_sink_member" {
 
 module "log_sink_filtered_to_bigquery" {
   source           = "github.com/XBankGCPOrg/gcp-lz-modules//log_sink?ref=main"
-  name             = "ls-b-log-bigquery"
+  name             = var.test_flag ? "ls-b-log-bigquery-test" : "ls-b-log-bigquery"
   org_id           = local.organization_id
   include_children = true
   destination      = "bigquery.googleapis.com/projects/${module.projects[var.project_logging].project_id}/datasets/${module.log_bigquery.dataset_id}"
@@ -102,7 +102,7 @@ resource "google_project_iam_member" "bigquery_sink_member" {
 
 module "log_sink_filtered_to_pubsub" {
   source           = "github.com/XBankGCPOrg/gcp-lz-modules//log_sink?ref=main"
-  name             = "ls-b-log-pubsub"
+  name             = var.test_flag ? "ls-b-log-pubsub-test" : "ls-b-log-pubsub-test"
   org_id           = local.organization_id
   include_children = true
   destination      = "pubsub.googleapis.com/projects/${module.projects[var.project_logging].project_id}/topics/${module.log_pubsub_topic.name}"

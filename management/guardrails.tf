@@ -98,7 +98,7 @@ module "guardrails_artifact_registry" {
 module "guardrails_log_sink" {
   source           = "github.com/XBankGCPOrg/gcp-lz-modules//log_sink?ref=main"
   for_each         = local.log_sinks
-  name             = "ls-b-guardrail-${each.value.name}"
+  name             = var.test_flag ? "ls-b-guardrail-${each.value.name}-test" : "ls-b-guardrail-${each.value.name}"
   org_id           = local.organization_id
   include_children = true
   destination      = "pubsub.googleapis.com/projects/${module.projects[var.project_guardrails].project_id}/topics/${module.guardrails_pubsub_log_topic[each.value.topic].name}"
