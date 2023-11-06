@@ -50,8 +50,8 @@ data "google_storage_project_service_account" "guardrails_gcs_account" {
 
 module "guardrails_kms_key" {
   source          = "github.com/XBankGCPOrg/gcp-lz-modules//kms/key?ref=main"
-  name            = module.projects[var.project_guardrails].project_id
-  key_ring_name   = module.projects[var.project_guardrails].project_id
+  name            = var.test_flag ? "${module.projects[var.project_guardrails].project_id}-test" : module.projects[var.project_guardrails].project_id
+  key_ring_name   = var.test_flag ? "${module.projects[var.project_guardrails].project_id}-test" : module.projects[var.project_guardrails].project_id
   project         = module.projects[var.project_guardrails].project_id
   location        = var.location
   rotation_period = "7776000s" #key rotation is set to 90 days

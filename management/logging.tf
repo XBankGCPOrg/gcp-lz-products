@@ -35,8 +35,8 @@ data "google_storage_project_service_account" "logging_gcs_account" {
 
 module "logging_kms_key" {
   source          = "github.com/XBankGCPOrg/gcp-lz-modules//kms/key?ref=main"
-  name            = module.projects[var.project_logging].project_id
-  key_ring_name   = module.projects[var.project_logging].project_id
+  name            = var.test_flag ? "${module.projects[var.project_logging].project_id}-test" : module.projects[var.project_logging].project_id
+  key_ring_name   = var.test_flag ? "${module.projects[var.project_logging].project_id}-test" : module.projects[var.project_logging].project_id
   project         = module.projects[var.project_logging].project_id
   location        = var.location
   rotation_period = "7776000s" #key rotation is set to 90 days
