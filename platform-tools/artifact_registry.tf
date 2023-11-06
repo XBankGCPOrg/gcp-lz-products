@@ -5,7 +5,7 @@ module "artifact_registry" {
   description = each.value.description
   project     = [for entry in data.google_cloud_asset_resources_search_all.projects.results : regex(local.regex_name, entry.name).name if entry.display_name == each.value.project].0
   location    = each.value.location
-  kms_key_id  = "projects/${[for entry in data.google_cloud_asset_resources_search_all.projects.results : regex(local.regex_name, entry.name).name if entry.display_name == each.value.kms.kms_project].0}/locations/${each.value.kms.kms_location}/keyRings/${[for entry in data.google_cloud_asset_resources_search_all.projects.results : regex(local.regex_name, entry.name).name if entry.display_name == each.value.kms.kms_project].0}/cryptoKeys/${[for entry in data.google_cloud_asset_resources_search_all.projects.results : regex(local.regex_name, entry.name).name if entry.display_name == each.value.kms.kms_project].0}"
+  kms_key_id  = "projects/${[for entry in data.google_cloud_asset_resources_search_all.projects.results : regex(local.regex_name, entry.name).name if entry.display_name == each.value.kms.kms_project].0}/locations/${each.value.kms.kms_location}/keyRings/${[for entry in data.google_cloud_asset_resources_search_all.projects.results : regex(local.regex_name, entry.name).name if entry.display_name == each.value.name].0}/cryptoKeys/${[for entry in data.google_cloud_asset_resources_search_all.projects.results : regex(local.regex_name, entry.name).name if entry.display_name == each.value.name].0}"
 
   depends_on = [module.centralized_kms.encrypters]
 }
