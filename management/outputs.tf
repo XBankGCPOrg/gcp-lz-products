@@ -1,5 +1,5 @@
 output "folder_ids" {
-  value = module.folders.folder_id
+  value = { for entry in module.folders.folder_id : keys(entry)[0] => values(entry)[0] }
 }
 
 output "project_ids" {
@@ -27,3 +27,8 @@ output "pub_sub_name" {
 # output "guardrails_cloudfunction_name" {
 #   value = module.guardrails_cloudfunction[keys(local.guardrails)[0]].google_cloudfunctions_function
 # }
+output "service_accounts" {
+  value = {
+    for entry in var.foundation_hierarchy.projects : entry.displayName => [for sa in local.service_accounts : module.service_accounts["${sa.name}@${sa.project}"].id]
+  }
+}
