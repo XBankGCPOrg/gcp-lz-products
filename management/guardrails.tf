@@ -133,6 +133,12 @@ module "service_account" {
   project      = module.projects[var.project_guardrails].project_id
 }
 
+resource "time_sleep" "wait_30_seconds" {
+  depends_on = [module.guardrails_artifact_registry, module.guardrails_service_identity, module.guardrails_kms_key.encrypters]
+
+  create_duration = "30s"
+}
+
 module "guardrails_cloudfunction" {
   source   = "github.com/XBankGCPOrg/gcp-lz-modules//compute/cloudfunction?ref=main"
   for_each = local.guardrails
@@ -157,7 +163,7 @@ module "guardrails_cloudfunction" {
 
   environment_variables = {}
 
-  depends_on = [module.guardrails_kms_key.encrypters, module.guardrails_artifact_registry, module.guardrails_service_identity]
+  depends_on = [module.guardrails_kms_key.encrypters, module.guardrails_artifact_registry, module.guardrails_service_identity, time_sleep.wait_30_seconds]
 }
 
 module "guardrail_pubsub_topic_alerts" {
