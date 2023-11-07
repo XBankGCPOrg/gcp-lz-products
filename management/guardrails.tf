@@ -157,7 +157,7 @@ module "guardrails_cloudfunction" {
 
   environment_variables = {}
 
-  depends_on = [module.guardrails_kms_key.encrypters]
+  depends_on = [module.guardrails_kms_key.encrypters, module.guardrails_artifact_registry, module.guardrails_service_identity]
 }
 
 module "guardrail_pubsub_topic_alerts" {
