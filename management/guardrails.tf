@@ -50,8 +50,8 @@ data "google_storage_project_service_account" "guardrails_gcs_account" {
 
 module "guardrails_kms_key" {
   source          = "github.com/XBankGCPOrg/gcp-lz-modules//kms/key?ref=main"
-  name            = module.projects[var.project_guardrails].project_id
-  key_ring_name   = module.projects[var.project_guardrails].project_id
+  name            = var.test_flag ? "${module.projects[var.project_guardrails].project_id}-test" : module.projects[var.project_guardrails].project_id
+  key_ring_name   = var.test_flag ? "${module.projects[var.project_guardrails].project_id}-test" : module.projects[var.project_guardrails].project_id
   project         = module.projects[var.project_guardrails].project_id
   location        = var.location
   rotation_period = "7776000s" #key rotation is set to 90 days
@@ -98,7 +98,7 @@ module "guardrails_artifact_registry" {
 module "guardrails_log_sink" {
   source           = "github.com/XBankGCPOrg/gcp-lz-modules//log_sink?ref=main"
   for_each         = local.log_sinks
-  name             = "ls-b-guardrail-${each.value.name}"
+  name             = var.test_flag ? "ls-b-guardrail-${each.value.name}-test" : "ls-b-guardrail-${each.value.name}"
   org_id           = local.organization_id
   include_children = true
   destination      = "pubsub.googleapis.com/projects/${module.projects[var.project_guardrails].project_id}/topics/${module.guardrails_pubsub_log_topic[each.value.topic].name}"
@@ -133,6 +133,12 @@ module "service_account" {
   project      = module.projects[var.project_guardrails].project_id
 }
 
+resource "time_sleep" "wait_30_seconds" {
+  depends_on = [module.guardrails_artifact_registry, module.guardrails_service_identity, module.guardrails_kms_key.encrypters]
+
+  create_duration = "30s"
+}
+
 module "guardrails_cloudfunction" {
   source   = "github.com/XBankGCPOrg/gcp-lz-modules//compute/cloudfunction?ref=main"
   for_each = local.guardrails
@@ -157,7 +163,7 @@ module "guardrails_cloudfunction" {
 
   environment_variables = {}
 
-  depends_on = [module.guardrails_kms_key.encrypters]
+  depends_on = [module.guardrails_kms_key.encrypters, module.guardrails_artifact_registry, module.guardrails_service_identity, time_sleep.wait_30_seconds]
 }
 
 module "guardrail_pubsub_topic_alerts" {

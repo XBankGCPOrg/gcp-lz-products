@@ -21,11 +21,17 @@ variable "foundation_hierarchy" {
       parent      = string
     }))
     projects = list(object({
-      displayName = string
-      parent      = string
-      services    = list(string)
-      labels      = map(string)
-      lienReason  = optional(string)
+      displayName        = string
+      parent             = string
+      services           = list(string)
+      labels             = map(string)
+      lienReason         = optional(string)
+      service_identities = optional(list(string), [])
+      service_accounts = optional(list(object({
+        name        = string
+        displayName = string
+        description = string
+      })), [])
     }))
   })
 
@@ -40,12 +46,18 @@ variable "iam_policy" {
   type = object({
     organizations = list(object({
       name = string
-      iamPolicy = object({
-        bindings = list(object({
-          role    = string
-          members = list(string)
-        }))
-      })
+      iamPolicy = optional(object({
+        bindings = optional(list(object({
+          role    = optional(string)
+          members = optional(list(string))
+        })), [])
+      }), {})
+      roles = optional(list(object({
+        name                = optional(string)
+        title               = optional(string)
+        description         = optional(string)
+        includedPermissions = optional(list(string))
+      })), [])
     }))
     folders = list(object({
       name = string
@@ -57,6 +69,21 @@ variable "iam_policy" {
       })
     }))
     projects = list(object({
+      name = string
+      iamPolicy = optional(object({
+        bindings = optional(list(object({
+          role    = optional(string)
+          members = optional(list(string))
+        })), [])
+      }), {})
+      roles = optional(list(object({
+        name                = optional(string)
+        title               = optional(string)
+        description         = optional(string)
+        includedPermissions = optional(list(string))
+      })), [])
+    }))
+    service_accounts = list(object({
       name = string
       iamPolicy = object({
         bindings = list(object({
@@ -108,4 +135,9 @@ variable "labels" {
     # primary-technical-contact = "davbutla"
     # project-code              = "245924"
   }
+}
+
+variable "test_flag" {
+  type    = bool
+  default = false
 }

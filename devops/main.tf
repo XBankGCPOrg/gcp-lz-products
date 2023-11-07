@@ -26,5 +26,5 @@ resource "google_resource_manager_lien" "lien" {
   parent       = "projects/${module.projects.number}"
   restrictions = ["resourcemanager.projects.delete"]
   origin       = "machine-readable-explanation"
-  reason       = "Critical seed project as part of the GCP Landing Zone Bootstrap"
+  reason       = "Critical seed project as part of the GCP Landing-zone Bootstrap"
 }
