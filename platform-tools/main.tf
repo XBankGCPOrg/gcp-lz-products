@@ -14,4 +14,5 @@ data "google_cloud_asset_resources_search_all" "projects" {
 
 locals {
   regex_name = "\\/\\/cloudresourcemanager\\.googleapis\\.com\\/(?P<type>.*)\\/(?P<name>.*)"
+  project_id = data.google_cloud_asset_resources_search_all.projects.results
 }

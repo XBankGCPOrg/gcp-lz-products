@@ -10,7 +10,9 @@ variable "centralized_kms" {
     location                   = string
     rotation_period            = string
     destroy_scheduled_duration = string
-    services                   = list(string)
+    services                   = optional(list(string), [])
+    encrypters                 = optional(list(string), [])
+    decrypters                 = optional(list(string), [])
   }))
   description = "Centralized KMS"
 }
