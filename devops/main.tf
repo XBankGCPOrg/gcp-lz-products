@@ -28,3 +28,37 @@ resource "google_resource_manager_lien" "lien" {
   origin       = "machine-readable-explanation"
   reason       = "Critical seed project as part of the GCP Landing-zone Bootstrap"
 }
+
+resource "google_folder_iam_audit_config" "folder_config" {
+
+  folder  = module.folders.name
+  service = "allServices"
+  audit_log_config {
+    log_type = "ADMIN_READ"
+  }
+
+  audit_log_config {
+    log_type = "DATA_READ"
+  }
+
+  audit_log_config {
+    log_type = "DATA_WRITE"
+  }
+}
+
+
+resource "google_project_iam_audit_config" "project_config" {
+  project = module.projects.project_id
+  service = "allServices"
+  audit_log_config {
+    log_type = "ADMIN_READ"
+  }
+
+  audit_log_config {
+    log_type = "DATA_READ"
+  }
+
+  audit_log_config {
+    log_type = "DATA_WRITE"
+  }
+}
