@@ -21,12 +21,13 @@ variable "foundation_hierarchy" {
       parent      = string
     }))
     projects = list(object({
-      displayName        = string
-      parent             = string
-      services           = list(string)
-      labels             = map(string)
-      lienReason         = optional(string)
-      service_identities = optional(list(string), [])
+      displayName         = string
+      parent              = string
+      services            = list(string)
+      labels              = map(string)
+      imported_project_id = optional(string, null)
+      lienReason          = optional(string)
+      service_identities  = optional(list(string), [])
       service_accounts = optional(list(object({
         name        = string
         displayName = string

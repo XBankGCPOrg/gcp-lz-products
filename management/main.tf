@@ -40,11 +40,12 @@ module "projects" {
   source   = "github.com/XBankGCPOrg/gcp-lz-modules//resources/project?ref=main"
   for_each = { for entry in var.foundation_hierarchy.projects : entry.displayName => entry }
 
-  name            = each.value.displayName
-  folder          = flatten([for folder in module.folders.folder_id : values(folder) if contains(keys(folder), each.value.parent)]).0
-  services        = each.value.services
-  billing_account = try(each.value.billingAccount, var.billing_account)
-  labels          = try(each.value.labels, var.labels)
+  name                = each.value.displayName
+  folder              = flatten([for folder in module.folders.folder_id : values(folder) if contains(keys(folder), each.value.parent)]).0
+  services            = each.value.services
+  billing_account     = try(each.value.billingAccount, var.billing_account)
+  labels              = try(each.value.labels, var.labels)
+  imported_project_id = each.value.imported_project_id
 }
 
 resource "google_resource_manager_lien" "lien" {
