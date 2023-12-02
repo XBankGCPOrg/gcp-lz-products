@@ -41,6 +41,18 @@ module "state_files" {
   depends_on = [module.control_kms_key.encrypters, module.control_kms_key.decrypters]
 }
 
+module "individual_state_files" {
+  source              = "github.com/XBankGCPOrg/gcp-lz-modules//storage/bucket?ref=main"
+  for_each            = distinct([for sa in var.service_accounts.service_accounts : sa.tfstateBucketName])
+  name                = "bkt-${module.projects.project_id}-${each.value}"
+  project             = module.projects.project_id
+  location            = var.location
+  data_classification = "terraform_state"
+  kms_key_id          = module.control_kms_key.key_id
+
+  depends_on = [module.control_kms_key.encrypters, module.control_kms_key.decrypters]
+}
+
 module "service_account" {
   source   = "github.com/XBankGCPOrg/gcp-lz-modules//iam/service_account?ref=main"
   for_each = { for sa in var.service_accounts.service_accounts : sa.name => sa }
@@ -73,9 +85,24 @@ resource "google_storage_bucket_iam_member" "sa_service_account_state_storage_ad
   member   = "serviceAccount:${module.service_account[each.key].email}"
 }
 
+resource "google_storage_bucket_iam_member" "sa_service_account_state_individual_storage_admin" {
+  for_each = { for sa in var.service_accounts.service_accounts : sa.name => sa }
+  bucket   = module.individual_state_files[each.value.tfstateBucketName].name
+  role     = "roles/storage.admin"
+  member   = "serviceAccount:${module.service_account[each.key].email}"
+}
+
+
 resource "google_billing_account_iam_member" "binding" {
   for_each           = { for sa in var.service_accounts.service_accounts : sa.name => sa if sa.billing_user }
   billing_account_id = var.billing_account
   role               = "roles/billing.user"
+  member             = "serviceAccount:${module.service_account[each.key].email}"
+}
+
+resource "google_billing_account_iam_member" "binding_admin" {
+  for_each           = { for sa in var.service_accounts.service_accounts : sa.name => sa if sa.billing_admin }
+  billing_account_id = var.billing_account
+  role               = "roles/billing.admin"
   member             = "serviceAccount:${module.service_account[each.key].email}"
 }
