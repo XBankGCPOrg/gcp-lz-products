@@ -43,7 +43,7 @@ module "state_files" {
 
 module "individual_state_files" {
   source              = "github.com/XBankGCPOrg/gcp-lz-modules//storage/bucket?ref=main"
-  for_each            = distinct([for sa in var.service_accounts.service_accounts : sa.tfstateBucketName])
+  for_each            = toset([for sa in var.service_accounts.service_accounts : sa.tfstateBucketName])
   name                = "bkt-${module.projects.project_id}-${each.value}"
   project             = module.projects.project_id
   location            = var.location
