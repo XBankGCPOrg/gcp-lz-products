@@ -33,11 +33,6 @@ variable "sa_iam_org_binding" {
   description = "IAM policy binding for WIF service account"
 }
 
-variable "gcs_terraform_bucket_name" {
-  type        = string
-  description = "Terraform GCS bucket name"
-}
-
 variable "enable_apis" {
   type        = list(string)
   description = "Terraform GCS bucket name"
