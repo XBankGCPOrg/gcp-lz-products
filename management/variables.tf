@@ -145,7 +145,7 @@ variable "test_flag" {
 
 variable "budget_config" {
   description = "Configuration for setting GCP budget"
-  type = object({
+  type = list(object({
     billing_account                  = string
     projects                         = list(string)
     create_budget                    = bool
@@ -164,5 +164,5 @@ variable "budget_config" {
     budget_amount_default            = string
     currency_code                    = string
     project_prefix                   = optional(string)
-  })
+  }))
 }
