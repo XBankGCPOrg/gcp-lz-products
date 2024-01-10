@@ -1,4 +1,4 @@
 module "shared-VPC" {
-  source          = "github.com/XBankGCPOrg/gcp-lz-modules//shared_vpc?ref=ef4fb7d8ccc15c5ea818d92d353f9a140355400b"
-  project_vending = var.project_vending
+  source     = "github.com/XBankGCPOrg/gcp-lz-modules//shared_vpc?ref=8174380ed7cf8ee97ac4fae29989045196460a43"
+  shared_vpc = var.shared_vpc
 }
