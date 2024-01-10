@@ -1,6 +1,6 @@
 variable "shared_vpc" {
-  type = object({
+  type = list(object({
     project         = string
     service_project = string
-  })
+  }))
 }
