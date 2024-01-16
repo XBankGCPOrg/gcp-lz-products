@@ -157,8 +157,8 @@ variable "budget_config" {
     custom_period_end_date           = string
     alert_spent_percents             = list(number)
     alert_spend_basis                = string
-    alert_pubsub_topic               = string
-    monitoring_notification_channels = list(string)
+    # alert_pubsub_topic               = string
+    # monitoring_notification_channels = list(string)
     labels                           = map(string)
     budget_amount_sandbox            = string
     budget_amount_default            = string
