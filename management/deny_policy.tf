@@ -1,8 +1,6 @@
 resource "google_iam_deny_policy" "deny_policy" {
-  provider = google-beta
-
-  for_each = { for policy in var.deny_policies : split("/", policy.name)[3] => policy }
-
+  for_each     = { for policy in var.deny_policies : split("/", policy.name)[3] => policy }
+  provider     = google-beta
   parent       = split("/", each.value.name)[1]
   name         = each.key
   display_name = each.value.displayName

@@ -1,0 +1,10 @@
+gcp-lz-devops:
+  - devops/**
+
+gcp-lz-management:
+  - management/**
+
+gcp-lz-github-workflow:
+  - .github/workflows/**
+
+  

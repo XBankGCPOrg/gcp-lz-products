@@ -17,20 +17,20 @@ locals {
 }
 
 module "organization_policy" {
-  source   = "github.com/XBankGCPOrg/gcp-lz-modules//iam/org_policy?ref=main"
+  source   = "github.com/XBankGCPOrg/gcp-lz-modules//iam/org_policy?ref=v2"
   parent   = "organizations/${local.organization_id}"
   policies = local.organization_policies
 }
 
 module "folder_policy" {
-  source   = "github.com/XBankGCPOrg/gcp-lz-modules//iam/org_policy?ref=main"
+  source   = "github.com/XBankGCPOrg/gcp-lz-modules//iam/org_policy?ref=v2"
   for_each = { for folder in local.folder_policies : folder.parent => folder }
-  parent   = flatten([for folder in module.folders.folder_id : values(folder) if contains(keys(folder), each.value.parent)]).0
+  parent   = flatten([for folder in module.folders.folder_id : values(folder) if contains(keys(folder), each.value.parent)])[0]
   policies = each.value.policy
 }
 
 module "project_policy" {
-  source   = "github.com/XBankGCPOrg/gcp-lz-modules//iam/org_policy?ref=main"
+  source   = "github.com/XBankGCPOrg/gcp-lz-modules//iam/org_policy?ref=v2"
   for_each = { for project in local.project_policies : project.parent => project }
   parent   = "projects/${module.projects[each.value.parent].project_id}"
   policies = each.value.policy

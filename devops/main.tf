@@ -1,18 +1,18 @@
 module "organization" {
-  source = "github.com/XBankGCPOrg/gcp-lz-modules//resources/organization?ref=main"
+  source = "github.com/XBankGCPOrg/gcp-lz-modules//resources/organization?ref=v2"
 
   domain = var.domain
 }
 
 module "folders" {
-  source = "github.com/XBankGCPOrg/gcp-lz-modules//resources/folder?ref=main"
+  source = "github.com/XBankGCPOrg/gcp-lz-modules//resources/folder?ref=v2"
 
   display_name = var.bootstrap_folder_name
   parent       = module.organization.name
 }
 
 module "projects" {
-  source = "github.com/XBankGCPOrg/gcp-lz-modules//resources/project?ref=main"
+  source = "github.com/XBankGCPOrg/gcp-lz-modules//resources/project?ref=v2"
 
   name            = var.seed_project_name
   folder          = module.folders.name
@@ -26,39 +26,5 @@ resource "google_resource_manager_lien" "lien" {
   parent       = "projects/${module.projects.number}"
   restrictions = ["resourcemanager.projects.delete"]
   origin       = "machine-readable-explanation"
-  reason       = "Critical seed project as part of the GCP Landing-zone Bootstrap"
-}
-
-resource "google_folder_iam_audit_config" "folder_config" {
-
-  folder  = module.folders.name
-  service = "allServices"
-  audit_log_config {
-    log_type = "ADMIN_READ"
-  }
-
-  audit_log_config {
-    log_type = "DATA_READ"
-  }
-
-  audit_log_config {
-    log_type = "DATA_WRITE"
-  }
-}
-
-
-resource "google_project_iam_audit_config" "project_config" {
-  project = module.projects.project_id
-  service = "allServices"
-  audit_log_config {
-    log_type = "ADMIN_READ"
-  }
-
-  audit_log_config {
-    log_type = "DATA_READ"
-  }
-
-  audit_log_config {
-    log_type = "DATA_WRITE"
-  }
+  reason       = "Critical seed project as part of the GCP Landing Zone Bootstrap"
 }

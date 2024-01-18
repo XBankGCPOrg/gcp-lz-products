@@ -1,0 +1,61 @@
+name: common/precheck
+on:
+  workflow_call:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  precheck:
+    name: precheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@ee0669bd1cc54295c223e0bb666b733df41de1c5 #v2
+      - name: Set up Python 3.8
+        uses: actions/setup-python@65d7f2d534ac1bc67fcd62888c5f4f3d2cb2b236 #v4
+        with:
+          python-version: 3.8
+
+      - uses: hashicorp/setup-terraform@a1502cd9e758c50496cc9ac5308c4843bcd56d36 #v3.0.0
+        with:
+          terraform_version: "1.6.5"
+      - name: Terraform - INIT
+        id: terraform_init
+        env:
+          GCP_LZ_GIT_USER: ${{ secrets.XBANK_GITHUB_USER }}
+          GCP_LZ_GIT_TOKEN: ${{ secrets.XBANK_GITHUB_TOKEN }}
+        run: |
+          git config --global url."https://${GCP_LZ_GIT_USER}:${GCP_LZ_GIT_TOKEN}@github.com/XBankGCPOrg".insteadOf "https://github.com/XBankGCPOrg"
+          chmod +x ./.github/tfinitall.sh
+          ./.github/tfinitall.sh
+
+      - name: Terraform - FMT, TFLINT, TERRASCAN
+        uses: github/super-linter/slim@a8150b40c89574adb5f68bf9502b890a236a06b3 #v5.7.2
+        env:
+          LOG_LEVEL: WARN
+          GITHUB_TOKEN: ${{ secrets.XBANK_GITHUB_TOKEN }}
+          DEFAULT_BRANCH: main
+          VALIDATE_MARKDOWN: false
+          IGNORE_GENERATED_FILES: true
+          FILTER_REGEX_EXCLUDE: ".*(terraform|variables).*"
+          # NOTE: you can also ignore specific file for terrascan by including @generated as comment in the file
+          FILTER_REGEX_INCLUDE: ".*.tf"
+
+      - name: Terraform - CHECKOV
+        id: checkov
+        uses: bridgecrewio/checkov-action@99bb2caf247dfd9f03cf984373bc6043d4e32ebf #v12.1347.0
+        with:
+          skip_check: CKV2_GHA_1 #skip GHA yaml checks
+
+      - name: Terraform - TFSEC
+        uses: aquasecurity/tfsec-action@b466648d6e39e7c75324f25d83891162a721f2d6 #v1.0.3
+
+      - name: TruffleHog Scan
+        continue-on-error: false
+        run: |
+          python -m pip install --upgrade pip
+          pip install truffleHog3
+          trufflehog3 --config=./.github/.trufflehog-action.config.yaml --rules=./.github/.trufflehog-action.rule.yaml

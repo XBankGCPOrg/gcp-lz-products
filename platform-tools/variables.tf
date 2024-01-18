@@ -5,14 +5,15 @@ variable "domain" {
 
 variable "centralized_kms" {
   type = list(object({
-    name                       = string
-    project                    = string
-    location                   = string
-    rotation_period            = string
-    destroy_scheduled_duration = string
-    services                   = optional(list(string), [])
-    encrypters                 = optional(list(string), [])
-    decrypters                 = optional(list(string), [])
+    name                     = string
+    project                  = string
+    location                 = string
+    rotationPeriod           = string
+    destroyScheduledDuration = string
+    services                 = optional(list(string), [])
+    encrypters               = optional(list(string), [])
+    decrypters               = optional(list(string), [])
+    preventDestroy           = optional(bool, false)
   }))
   description = "Centralized KMS"
 }
@@ -23,8 +24,8 @@ variable "artifact_registry" {
     description = string
     project     = string
     kms = object({
-      kms_location = string
-      kms_project  = string
+      kmsLocation = string
+      kmsProject  = string
     })
     location = string
   }))

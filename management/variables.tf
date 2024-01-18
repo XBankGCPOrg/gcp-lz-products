@@ -21,23 +21,91 @@ variable "foundation_hierarchy" {
       parent      = string
     }))
     projects = list(object({
-      displayName         = string
-      parent              = string
-      services            = list(string)
-      labels              = map(string)
-      imported_project_id = optional(string, null)
-      lienReason          = optional(string)
-      service_identities  = optional(list(string), [])
-      service_accounts = optional(list(object({
+      displayName       = string
+      parent            = string
+      services          = list(string)
+      labels            = map(string)
+      importedProjectId = optional(string, null)
+      lienReason        = optional(string)
+      serviceIdentities = optional(list(string), [])
+      serviceAccounts = optional(list(object({
         name        = string
         displayName = string
         description = string
       })), [])
     }))
+    #    subscriptions = list(object({}))
+    subscriptions = list(object({
+      name                         = string
+      labels                       = optional(map(string))
+      ack_deadline_seconds         = optional(number)
+      message_retention_duration   = optional(string)
+      retain_acked_messages        = optional(bool, false)
+      expiration_policy_ttl        = optional(string)
+      filter                       = optional(string)
+      enable_message_ordering      = optional(bool, false)
+      enable_exactly_once_delivery = optional(bool, false)
+      dead_letter_policy = optional(object({
+        topic                 = string
+        max_delivery_attempts = optional(number)
+      }))
+      retry_policy = optional(object({
+        minimum_backoff = optional(number)
+        maximum_backoff = optional(number)
+      }))
+
+      bigquery = optional(object({
+        table               = string
+        use_topic_schema    = optional(bool, false)
+        write_metadata      = optional(bool, false)
+        drop_unknown_fields = optional(bool, false)
+      }))
+      cloud_storage = optional(object({
+        bucket          = string
+        filename_prefix = optional(string)
+        filename_suffix = optional(string)
+        max_duration    = optional(string)
+        max_bytes       = optional(number)
+        avro_config = optional(object({
+          write_metadata = optional(bool, false)
+        }))
+      }))
+      push = optional(object({
+        endpoint   = string
+        attributes = optional(map(string))
+        no_wrapper = optional(bool, false)
+        oidc_token = optional(object({
+          audience              = optional(string)
+          service_account_email = string
+        }))
+      }))
+
+      iam = optional(map(list(string)), {})
+      iam_bindings = optional(map(object({
+        members = optional(list(string))
+        role    = optional(string)
+        condition = optional(object({
+          expression  = string
+          title       = string
+          description = optional(string)
+        }))
+      })), {})
+      iam_bindings_additive = optional(map(object({
+        member = optional(string)
+        role   = optional(string)
+        condition = optional(object({
+          expression  = string
+          title       = string
+          description = optional(string)
+        }))
+      })), {})
+    }))
+
+
   })
 
   validation {
-    condition     = length(var.foundation_hierarchy.folders.*.displayName) == length(distinct(var.foundation_hierarchy.folders.*.displayName)) && length(var.foundation_hierarchy.projects.*.displayName) == length(distinct(var.foundation_hierarchy.projects.*.displayName))
+    condition     = length(var.foundation_hierarchy.folders[*].displayName) == length(distinct(var.foundation_hierarchy.folders[*].displayName)) && length(var.foundation_hierarchy.projects[*].displayName) == length(distinct(var.foundation_hierarchy.projects[*].displayName))
     error_message = "Folder or Project name already exists/duplicated."
   }
 }
@@ -49,7 +117,7 @@ variable "iam_policy" {
       name = string
       iamPolicy = optional(object({
         bindings = optional(list(object({
-          role    = optional(string)
+          roles   = optional(list(string))
           members = optional(list(string))
         })), [])
       }), {})
@@ -64,7 +132,7 @@ variable "iam_policy" {
       name = string
       iamPolicy = object({
         bindings = list(object({
-          role    = string
+          roles   = list(string)
           members = list(string)
         }))
       })
@@ -73,7 +141,7 @@ variable "iam_policy" {
       name = string
       iamPolicy = optional(object({
         bindings = optional(list(object({
-          role    = optional(string)
+          roles   = optional(list(string))
           members = optional(list(string))
         })), [])
       }), {})
@@ -84,11 +152,11 @@ variable "iam_policy" {
         includedPermissions = optional(list(string))
       })), [])
     }))
-    service_accounts = list(object({
+    serviceAccounts = list(object({
       name = string
       iamPolicy = object({
         bindings = list(object({
-          role    = string
+          roles   = list(string)
           members = list(string)
         }))
       })
@@ -138,10 +206,12 @@ variable "labels" {
   }
 }
 
+
 variable "test_flag" {
   type    = bool
   default = false
 }
+
 
 variable "budget_config" {
   description = "Configuration for setting GCP budget"
@@ -166,6 +236,7 @@ variable "budget_config" {
     project_prefix        = optional(string)
   }))
 }
+
 
 variable "monitoring_config" {
   description = "Configuration for monitoring metrics and alerts"
@@ -256,7 +327,7 @@ variable "monitoring_config" {
     bandwidth_alert_per_series_aligner      = string
     bandwidth_alert_combiner                = string
 
-    # monitoring_notification_channels = list(string)
+    #monitoring_notification_channels = list(string)
     email_notification_display_name = string
     email_notification_address      = string
   }))

@@ -38,7 +38,7 @@ locals {
 }
 
 module "guardrails_service_identity" {
-  source   = "github.com/XBankGCPOrg/gcp-lz-modules//resources/service_identity?ref=main"
+  source   = "github.com/XBankGCPOrg/gcp-lz-modules//resources/service_identity?ref=v2"
   for_each = toset(local.guardrails_services)
   project  = module.projects[var.project_guardrails].project_id
   service  = each.value
@@ -49,23 +49,24 @@ data "google_storage_project_service_account" "guardrails_gcs_account" {
 }
 
 module "guardrails_kms_key" {
-  source          = "github.com/XBankGCPOrg/gcp-lz-modules//kms/key?ref=main"
-  name            = var.test_flag ? "${module.projects[var.project_guardrails].project_id}-test" : module.projects[var.project_guardrails].project_id
-  key_ring_name   = var.test_flag ? "${module.projects[var.project_guardrails].project_id}-test" : module.projects[var.project_guardrails].project_id
-  project         = module.projects[var.project_guardrails].project_id
-  location        = var.location
-  rotation_period = "7776000s" #key rotation is set to 90 days
-  encrypters      = local.guardrails_encrypters
-  decrypters      = local.guardrails_encrypters
+  source                     = "github.com/XBankGCPOrg/gcp-lz-modules//kms/key?ref=v2"
+  name                       = var.test_flag ? "${module.projects[var.project_guardrails].project_id}-test" : module.projects[var.project_guardrails].project_id
+  key_ring_name              = var.test_flag ? "${module.projects[var.project_guardrails].project_id}-test" : module.projects[var.project_guardrails].project_id
+  project                    = module.projects[var.project_guardrails].project_id
+  location                   = var.location
+  rotation_period            = "7776000s" #key rotation is set to 90 days
+  destroy_scheduled_duration = "7776000s"
+  encrypters                 = local.guardrails_encrypters
+  decrypters                 = local.guardrails_encrypters
 }
 
 module "guardrails_storage" {
-  source              = "github.com/XBankGCPOrg/gcp-lz-modules//storage/bucket?ref=main"
-  name                = "bkt-${module.projects[var.project_guardrails].project_id}-guardrails"
-  project             = module.projects[var.project_guardrails].project_id
-  location            = var.location
-  kms_key_id          = module.guardrails_kms_key.key_id
-  data_classification = "code"
+  source     = "github.com/XBankGCPOrg/gcp-lz-modules//storage/bucket?ref=v2"
+  name       = "bkt-${module.projects[var.project_guardrails].project_id}-guardrails"
+  project    = module.projects[var.project_guardrails].project_id
+  location   = var.location
+  kms_key_id = module.guardrails_kms_key.key_id
+  #data_classification = "code"
 
   depends_on = [module.guardrails_kms_key.encrypters]
 }
@@ -83,7 +84,7 @@ resource "google_storage_bucket_object" "guardrails" {
 }
 
 module "guardrails_artifact_registry" {
-  source = "github.com/XBankGCPOrg/gcp-lz-modules//devops/artifact_registry?ref=main"
+  source = "github.com/XBankGCPOrg/gcp-lz-modules//devops/artifact_registry?ref=v2"
 
   name        = "ar-${module.projects[var.project_guardrails].project_id}-guardrails"
   description = "Docker containers for guardrail cloudfunctions"
@@ -96,7 +97,7 @@ module "guardrails_artifact_registry" {
 }
 
 module "guardrails_log_sink" {
-  source           = "github.com/XBankGCPOrg/gcp-lz-modules//log_sink?ref=main"
+  source           = "github.com/XBankGCPOrg/gcp-lz-modules//log_sink?ref=v2"
   for_each         = local.log_sinks
   name             = var.test_flag ? "ls-b-guardrail-${each.value.name}-test" : "ls-b-guardrail-${each.value.name}"
   org_id           = local.organization_id
@@ -106,7 +107,7 @@ module "guardrails_log_sink" {
 }
 
 module "guardrails_pubsub_log_topic" {
-  source     = "github.com/XBankGCPOrg/gcp-lz-modules//pubsub/topic?ref=main"
+  source     = "github.com/XBankGCPOrg/gcp-lz-modules//pubsub/topic?ref=v2"
   for_each   = local.guardrails
   name       = "ps-${module.projects[var.project_guardrails].project_id}-guardrail-${each.value.log_topic}"
   project    = module.projects[var.project_guardrails].project_id
@@ -124,7 +125,7 @@ resource "google_pubsub_topic_iam_member" "guardrails_pubsub_sink_member" {
 }
 
 module "service_account" {
-  source   = "github.com/XBankGCPOrg/gcp-lz-modules//iam/service_account?ref=main"
+  source   = "github.com/XBankGCPOrg/gcp-lz-modules//iam/service_account?ref=v2"
   for_each = local.guardrails
 
   name         = "sa-guardrail-${each.value.name}"
@@ -133,14 +134,8 @@ module "service_account" {
   project      = module.projects[var.project_guardrails].project_id
 }
 
-resource "time_sleep" "wait_30_seconds" {
-  depends_on = [module.guardrails_artifact_registry, module.guardrails_service_identity, module.guardrails_kms_key.encrypters]
-
-  create_duration = "30s"
-}
-
 module "guardrails_cloudfunction" {
-  source   = "github.com/XBankGCPOrg/gcp-lz-modules//compute/cloudfunction?ref=main"
+  source   = "github.com/XBankGCPOrg/gcp-lz-modules//compute/cloudfunction?ref=v2"
   for_each = local.guardrails
   project  = module.projects[var.project_guardrails].project_id
   location = var.location
@@ -163,11 +158,11 @@ module "guardrails_cloudfunction" {
 
   environment_variables = {}
 
-  depends_on = [module.guardrails_kms_key.encrypters, module.guardrails_artifact_registry, module.guardrails_service_identity, time_sleep.wait_30_seconds]
+  depends_on = [module.guardrails_kms_key.encrypters]
 }
 
 module "guardrail_pubsub_topic_alerts" {
-  source     = "github.com/XBankGCPOrg/gcp-lz-modules//pubsub/topic?ref=main"
+  source     = "github.com/XBankGCPOrg/gcp-lz-modules//pubsub/topic?ref=v2"
   name       = "ps-${module.projects[var.project_guardrails].project_id}-guardrails-alert"
   project    = module.projects[var.project_guardrails].project_id
   kms_key_id = module.guardrails_kms_key.key_id

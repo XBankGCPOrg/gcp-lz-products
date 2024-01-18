@@ -17,8 +17,8 @@ locals {
   project_roles = flatten([
     for project in var.iam_policy.projects : [
       for role in project.roles : {
-        name        = role.name
-        project     = project.name
+        name        = split("::", role.name)[0]
+        project     = split("::", role.name)[1]
         title       = role.title
         description = role.description
         permissions = role.includedPermissions
@@ -29,11 +29,13 @@ locals {
   organization_bindings = flatten([
     for organization in var.iam_policy.organizations : [
       for binding in organization.iamPolicy.bindings : [
-        for member in binding.members : {
-          org_id = organization.name
-          role   = binding.role
-          member = member
-        }
+        for member in binding.members : [
+          for role in binding.roles : {
+            org_id = organization.name
+            role   = role
+            member = member
+          }
+        ]
       ]
     ]
   ])
@@ -42,11 +44,13 @@ locals {
   folder_bindings = flatten([
     for folder in var.iam_policy.folders : [
       for binding in folder.iamPolicy.bindings : [
-        for member in binding.members : {
-          folder_id = folder.name
-          role      = binding.role
-          member    = member
-        }
+        for member in binding.members : [
+          for role in binding.roles : {
+            folder_id = split("::", member)[1]
+            role      = role
+            member    = split("::", member)[0]
+          }
+        ]
       ]
     ]
   ])
@@ -55,23 +59,27 @@ locals {
   project_bindings = flatten([
     for project in var.iam_policy.projects : [
       for binding in project.iamPolicy.bindings : [
-        for member in binding.members : {
-          project_id = project.name
-          role       = binding.role
-          member     = member
-        }
+        for member in binding.members : [
+          for role in binding.roles : {
+            project_id = split("::", member)[1]
+            role       = role
+            member     = split("::", member)[0]
+          }
+        ]
       ]
     ]
   ])
 
   service_account_bindings = flatten([
-    for service_account in var.iam_policy.service_accounts : [
+    for service_account in var.iam_policy.serviceAccounts : [
       for binding in service_account.iamPolicy.bindings : [
-        for member in binding.members : {
-          name   = service_account.name
-          role   = binding.role
-          member = member
-        }
+        for member in binding.members : [
+          for role in binding.roles : {
+            name   = service_account.name
+            role   = role
+            member = member
+          }
+        ]
       ]
     ]
   ])
@@ -102,15 +110,15 @@ resource "google_organization_iam_member" "organization" {
 
   org_id = module.organization.org_id
   role   = regex(local.regex_role, each.value.role).type == "roles" ? each.value.role : google_organization_iam_custom_role.organization[regex(local.regex_role, each.value.role).name].name
-  member = strcontains(each.value.member, "=>") ? startswith(each.value.member, "serviceAccount") ? "serviceAccount:${module.service_accounts[split("=>", each.value.member).1].member}" : "serviceAccount:${local.combined_service_identity_email[split("=>", each.value.member).1]}" : each.value.member
+  member = strcontains(each.value.member, "=>") ? startswith(each.value.member, "serviceAccount") ? "serviceAccount:${module.service_accounts[split("=>", each.value.member)[1]].email}" : "serviceAccount:${local.combined_service_identity_email[split("=>", each.value.member)[1]]}" : each.value.member
 }
 
 resource "google_folder_iam_member" "folder" {
   for_each = { for binding in local.folder_bindings : "${binding.folder_id}/${binding.role}/${binding.member}" => binding }
 
-  folder = flatten([for folder in module.folders.folder_id : values(folder) if contains(keys(folder), each.value.folder_id)]).0
+  folder = flatten([for folder in module.folders.folder_id : values(folder) if contains(keys(folder), each.value.folder_id)])[0]
   role   = regex(local.regex_role, each.value.role).type == "roles" ? each.value.role : google_organization_iam_custom_role.organization[regex(local.regex_role, each.value.role).name].name
-  member = strcontains(each.value.member, "=>") ? startswith(each.value.member, "serviceAccount") ? "serviceAccount:${module.service_accounts[split("=>", each.value.member).1].member}" : "serviceAccount:${local.combined_service_identity_email[split("=>", each.value.member).1]}" : each.value.member
+  member = strcontains(each.value.member, "=>") ? startswith(each.value.member, "serviceAccount") ? "serviceAccount:${module.service_accounts[split("=>", each.value.member)[1]].email}" : "serviceAccount:${local.combined_service_identity_email[split("=>", each.value.member)[1]]}" : each.value.member
 }
 
 resource "google_project_iam_member" "project" {
@@ -118,13 +126,13 @@ resource "google_project_iam_member" "project" {
 
   project = module.projects[each.value.project_id].project_id
   role    = regex(local.regex_role, each.value.role).type == "roles" ? each.value.role : regex(local.regex_role, each.value.role).type == "organization" ? google_organization_iam_custom_role.organization[regex(local.regex_role, each.value.role).name].name : google_project_iam_custom_role.project[regex(local.regex_role, each.value.role).name].name
-  member  = strcontains(each.value.member, "=>") ? startswith(each.value.member, "serviceAccount") ? "serviceAccount:${module.service_accounts[split("=>", each.value.member).1].email}" : "serviceAccount:${local.combined_service_identity_email[split("=>", each.value.member).1]}" : each.value.member
+  member  = strcontains(each.value.member, "=>") ? startswith(each.value.member, "serviceAccount") ? "serviceAccount:${module.service_accounts[split("=>", each.value.member)[1]].email}" : "serviceAccount:${local.combined_service_identity_email[split("=>", each.value.member)[1]]}" : each.value.member
 }
 
 resource "google_service_account_iam_member" "service_account" {
   for_each = { for binding in local.service_account_bindings : "${binding.name}/${binding.role}/${binding.member}" => binding }
 
-  service_account_id = startswith(each.value.name, "serviceAccount") ? module.service_accounts[split("=>", each.value.name).1].id : each.value.name
+  service_account_id = startswith(each.value.name, "serviceAccount") ? module.service_accounts[split("=>", each.value.name)[1]].id : each.value.name
   role               = regex(local.regex_role, each.value.role).type == "roles" ? each.value.role : regex(local.regex_role, each.value.role).type == "organization" ? google_organization_iam_custom_role.organization[regex(local.regex_role, each.value.role).name].name : google_project_iam_custom_role.project[regex(local.regex_role, each.value.role).name].name
-  member             = strcontains(each.value.member, "=>") ? startswith(each.value.member, "serviceAccount") ? "serviceAccount:${module.service_accounts[split("=>", each.value.member).1].member}" : "serviceAccount:${local.combined_service_identity_email[split("=>", each.value.member).1]}" : each.value.member
+  member             = strcontains(each.value.member, "=>") ? startswith(each.value.member, "serviceAccount") ? "serviceAccount:${module.service_accounts[split("=>", each.value.member)[1]].email}" : "serviceAccount:${local.combined_service_identity_email[split("=>", each.value.member)[1]]}" : each.value.member
 }

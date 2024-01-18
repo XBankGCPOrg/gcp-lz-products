@@ -5,7 +5,7 @@ data "google_organization" "organization" {
 locals {
   organization_id = data.google_organization.organization.org_id
   service_accounts = flatten([for project in var.foundation_hierarchy.projects : [
-    for service_account in project.service_accounts : {
+    for service_account in project.serviceAccounts : {
       name        = service_account.name
       displayName = service_account.displayName
       description = service_account.description
@@ -13,7 +13,7 @@ locals {
     }]
   ])
   service_identities = flatten([for project in var.foundation_hierarchy.projects : [
-    for service_identity in project.service_identities : {
+    for service_identity in project.serviceIdentities : {
       project = project.displayName
       service = service_identity
     }
@@ -26,26 +26,26 @@ locals {
 }
 
 module "organization" {
-  source = "github.com/XBankGCPOrg/gcp-lz-modules//resources/organization?ref=main"
+  source = "github.com/XBankGCPOrg/gcp-lz-modules//resources/organization?ref=v2"
   domain = var.domain
 }
 
 module "folders" {
-  source      = "github.com/XBankGCPOrg/gcp-lz-modules//resources/multi_level_folder?ref=main"
+  source      = "github.com/XBankGCPOrg/gcp-lz-modules//resources/multi_level_folder?ref=v2"
   folder_list = var.foundation_hierarchy.folders
   parent_name = module.organization.name
 }
 
 module "projects" {
-  source   = "github.com/XBankGCPOrg/gcp-lz-modules//resources/project?ref=main"
+  source   = "github.com/XBankGCPOrg/gcp-lz-modules//resources/project?ref=v2"
   for_each = { for entry in var.foundation_hierarchy.projects : entry.displayName => entry }
 
   name                = each.value.displayName
-  folder              = flatten([for folder in module.folders.folder_id : values(folder) if contains(keys(folder), each.value.parent)]).0
+  folder              = flatten([for folder in module.folders.folder_id : values(folder) if contains(keys(folder), each.value.parent)])[0]
   services            = each.value.services
   billing_account     = try(each.value.billingAccount, var.billing_account)
   labels              = try(each.value.labels, var.labels)
-  imported_project_id = each.value.imported_project_id
+  imported_project_id = each.value.importedProjectId
 }
 
 resource "google_resource_manager_lien" "lien" {
@@ -58,7 +58,7 @@ resource "google_resource_manager_lien" "lien" {
 }
 
 module "service_accounts" {
-  source   = "github.com/XBankGCPOrg/gcp-lz-modules//iam/service_account?ref=main"
+  source   = "github.com/XBankGCPOrg/gcp-lz-modules//iam/service_account?ref=v2"
   for_each = { for entry in local.service_accounts : "${entry.name}@${entry.project}" => entry }
 
   name         = each.value.name
@@ -68,7 +68,7 @@ module "service_accounts" {
 }
 
 module "service_identity" {
-  source   = "github.com/XBankGCPOrg/gcp-lz-modules//resources/service_identity?ref=main"
+  source   = "github.com/XBankGCPOrg/gcp-lz-modules//resources/service_identity?ref=v2"
   for_each = { for entry in local.service_identities : "${entry.service}@${entry.project}" => entry if contains(local.default_services, entry.service) == false }
   project  = module.projects[each.value.project].project_id
   service  = each.value.service

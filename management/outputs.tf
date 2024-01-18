@@ -32,3 +32,4 @@ output "service_accounts" {
     for entry in var.foundation_hierarchy.projects : entry.displayName => compact([for sa in local.service_accounts : sa.project == entry.displayName ? module.service_accounts["${sa.name}@${sa.project}"].id : ""])
   }
 }
+

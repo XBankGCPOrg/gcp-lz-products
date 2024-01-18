@@ -15,7 +15,6 @@ resource "google_organization_iam_audit_config" "org_config" {
   }
 }
 
-
 resource "google_folder_iam_audit_config" "folder_config" {
   for_each = toset([for entry in var.foundation_hierarchy.folders : entry.displayName])
   folder   = flatten([for folder in module.folders.folder_id : values(folder) if contains(keys(folder), each.key)])[0]

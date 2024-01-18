@@ -16,13 +16,13 @@ locals {
 }
 
 module "logging_service_identity_for_bigquerry" {
-  source  = "github.com/XBankGCPOrg/gcp-lz-modules//resources/service_identity?ref=main"
+  source  = "github.com/XBankGCPOrg/gcp-lz-modules//resources/service_identity?ref=v2"
   project = module.projects[var.project_logging].project_id
   service = "bigquery.googleapis.com"
 }
 
 module "logging_service_identity" {
-  source     = "github.com/XBankGCPOrg/gcp-lz-modules//resources/service_identity?ref=main"
+  source     = "github.com/XBankGCPOrg/gcp-lz-modules//resources/service_identity?ref=v2"
   for_each   = toset(local.logging_services)
   project    = module.projects[var.project_logging].project_id
   service    = each.value
@@ -34,19 +34,20 @@ data "google_storage_project_service_account" "logging_gcs_account" {
 }
 
 module "logging_kms_key" {
-  source          = "github.com/XBankGCPOrg/gcp-lz-modules//kms/key?ref=main"
-  name            = var.test_flag ? "${module.projects[var.project_logging].project_id}-test" : module.projects[var.project_logging].project_id
-  key_ring_name   = var.test_flag ? "${module.projects[var.project_logging].project_id}-test" : module.projects[var.project_logging].project_id
-  project         = module.projects[var.project_logging].project_id
-  location        = var.location
-  rotation_period = "7776000s" #key rotation is set to 90 days
-  encrypters      = local.logging_encrypters
-  decrypters      = local.logging_encrypters
+  source                     = "github.com/XBankGCPOrg/gcp-lz-modules//kms/key?ref=v2"
+  name                       = var.test_flag ? "${module.projects[var.project_logging].project_id}-test" : module.projects[var.project_logging].project_id
+  key_ring_name              = var.test_flag ? "${module.projects[var.project_logging].project_id}-test" : module.projects[var.project_logging].project_id
+  project                    = module.projects[var.project_logging].project_id
+  location                   = var.location
+  rotation_period            = "7776000s" #key rotation is set to 90 days
+  destroy_scheduled_duration = "7776000s"
+  encrypters                 = local.logging_encrypters
+  decrypters                 = local.logging_encrypters
 }
 
 # No filter on this log sink ensures all logs are forwarded to the storage bucket
 module "log_sink_all_to_storage" {
-  source           = "github.com/XBankGCPOrg/gcp-lz-modules//log_sink?ref=main"
+  source           = "github.com/XBankGCPOrg/gcp-lz-modules//log_sink?ref=v2"
   name             = var.test_flag ? "ls-b-log-storage-test" : "ls-b-log-storage"
   org_id           = local.organization_id
   include_children = true
@@ -55,12 +56,12 @@ module "log_sink_all_to_storage" {
 }
 
 module "log_storage" {
-  source              = "github.com/XBankGCPOrg/gcp-lz-modules//storage/bucket?ref=main"
-  name                = "bkt-${module.projects[var.project_logging].project_id}-log-storage"
-  project             = module.projects[var.project_logging].project_id
-  location            = var.location
-  kms_key_id          = module.logging_kms_key.key_id
-  data_classification = "logs"
+  source     = "github.com/XBankGCPOrg/gcp-lz-modules//storage/bucket?ref=v2"
+  name       = "bkt-${module.projects[var.project_logging].project_id}-log-storage"
+  project    = module.projects[var.project_logging].project_id
+  location   = var.location
+  kms_key_id = module.logging_kms_key.key_id
+  # data_classification = "logs"
 
   depends_on = [module.logging_kms_key.encrypters]
 }
@@ -72,7 +73,7 @@ resource "google_storage_bucket_iam_member" "storage_sink_member" {
 }
 
 module "log_sink_filtered_to_bigquery" {
-  source           = "github.com/XBankGCPOrg/gcp-lz-modules//log_sink?ref=main"
+  source           = "github.com/XBankGCPOrg/gcp-lz-modules//log_sink?ref=v2"
   name             = var.test_flag ? "ls-b-log-bigquery-test" : "ls-b-log-bigquery"
   org_id           = local.organization_id
   include_children = true
@@ -85,12 +86,11 @@ module "log_sink_filtered_to_bigquery" {
 }
 
 module "log_bigquery" {
-  source                     = "github.com/XBankGCPOrg/gcp-lz-modules//bigquery/dataset?ref=main"
-  name                       = "bq_${replace(module.projects[var.project_logging].project_id, "-", "_")}"
-  project                    = module.projects[var.project_logging].project_id
-  location                   = var.location
-  kms_key_id                 = module.logging_kms_key.key_id
-  delete_contents_on_destroy = true
+  source     = "github.com/XBankGCPOrg/gcp-lz-modules//bigquery/dataset?ref=v2"
+  name       = "bq_${replace(module.projects[var.project_logging].project_id, "-", "_")}"
+  project    = module.projects[var.project_logging].project_id
+  location   = var.location
+  kms_key_id = module.logging_kms_key.key_id
 
   depends_on = [module.logging_kms_key.encrypters]
 }
@@ -102,8 +102,8 @@ resource "google_project_iam_member" "bigquery_sink_member" {
 }
 
 module "log_sink_filtered_to_pubsub" {
-  source           = "github.com/XBankGCPOrg/gcp-lz-modules//log_sink?ref=main"
-  name             = var.test_flag ? "ls-b-log-pubsub-test" : "ls-b-log-pubsub-test"
+  source           = "github.com/XBankGCPOrg/gcp-lz-modules//log_sink?ref=v2"
+  name             = var.test_flag ? "ls-b-log-pubsub-test" : "ls-b-log-pubsub"
   org_id           = local.organization_id
   include_children = true
   destination      = "pubsub.googleapis.com/projects/${module.projects[var.project_logging].project_id}/topics/${module.log_pubsub_topic.name}"
@@ -111,12 +111,14 @@ module "log_sink_filtered_to_pubsub" {
 }
 
 module "log_pubsub_topic" {
-  source     = "github.com/XBankGCPOrg/gcp-lz-modules//pubsub/topic?ref=main"
-  name       = "ps-${module.projects[var.project_logging].project_id}-log"
-  project    = module.projects[var.project_logging].project_id
-  kms_key_id = module.logging_kms_key.key_id
 
-  depends_on = [module.logging_kms_key.encrypters]
+  source = "github.com/XBankGCPOrg/gcp-lz-modules//pubsub/topic?ref=v2"
+
+  name          = "ps-${module.projects[var.project_logging].project_id}-log"
+  project       = module.projects[var.project_logging].project_id
+  kms_key_id    = module.logging_kms_key.key_id
+  subscriptions = var.foundation_hierarchy.subscriptions
+  depends_on    = [module.logging_kms_key.encrypters]
 }
 
 resource "google_pubsub_topic_iam_member" "pubsub_sink_member" {
