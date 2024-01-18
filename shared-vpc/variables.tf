@@ -1,8 +1,8 @@
 variable "shared_vpc" {
   type = list(object({
-    project         = string
+    host_project    = string
     service_project = string
     service_account = string
-    subnet          = string
+    subnet          = list(string)
   }))
 }
