@@ -17,7 +17,7 @@ No providers.
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_gke-autopilot"></a> [gke-autopilot](#module\_gke-autopilot) | github.com/XBankGCPOrg/gcp-lz-modules//gke/gke-autopilot | 2a63a92fee6c692ce922a144a9b69651e63e42c5 |
+| <a name="module_gke-autopilot"></a> [gke-autopilot](#module\_gke-autopilot) | github.com/XBankGCPOrg/gcp-lz-modules//gke/gke-autopilot | v2 |
 
 ## Resources
 

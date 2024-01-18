@@ -23,37 +23,37 @@
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_billing_dataset"></a> [billing\_dataset](#module\_billing\_dataset) | github.com/XBankGCPOrg/gcp-lz-modules//bigquery/dataset | 35e1ac51b81725fb3378b83f10f3cae9b2956e78 |
-| <a name="module_billing_details_dataset"></a> [billing\_details\_dataset](#module\_billing\_details\_dataset) | github.com/XBankGCPOrg/gcp-lz-modules//bigquery/dataset | 35e1ac51b81725fb3378b83f10f3cae9b2956e78 |
-| <a name="module_budget"></a> [budget](#module\_budget) | github.com/XBankGCPOrg/gcp-lz-modules//budget/ | ce60f35508afee58dd625528ae7484241d7ee6fe |
-| <a name="module_folder_policy"></a> [folder\_policy](#module\_folder\_policy) | github.com/XBankGCPOrg/gcp-lz-modules//iam/org_policy | 35e1ac51b81725fb3378b83f10f3cae9b2956e78 |
-| <a name="module_folders"></a> [folders](#module\_folders) | github.com/XBankGCPOrg/gcp-lz-modules//resources/multi_level_folder | 35e1ac51b81725fb3378b83f10f3cae9b2956e78 |
-| <a name="module_guardrail_pubsub_topic_alerts"></a> [guardrail\_pubsub\_topic\_alerts](#module\_guardrail\_pubsub\_topic\_alerts) | github.com/XBankGCPOrg/gcp-lz-modules//pubsub/topic | 35e1ac51b81725fb3378b83f10f3cae9b2956e78 |
-| <a name="module_guardrails_artifact_registry"></a> [guardrails\_artifact\_registry](#module\_guardrails\_artifact\_registry) | github.com/XBankGCPOrg/gcp-lz-modules//devops/artifact_registry | 35e1ac51b81725fb3378b83f10f3cae9b2956e78 |
-| <a name="module_guardrails_cloudfunction"></a> [guardrails\_cloudfunction](#module\_guardrails\_cloudfunction) | github.com/XBankGCPOrg/gcp-lz-modules//compute/cloudfunction | 35e1ac51b81725fb3378b83f10f3cae9b2956e78 |
-| <a name="module_guardrails_kms_key"></a> [guardrails\_kms\_key](#module\_guardrails\_kms\_key) | github.com/XBankGCPOrg/gcp-lz-modules//kms/key | 35e1ac51b81725fb3378b83f10f3cae9b2956e78 |
-| <a name="module_guardrails_log_sink"></a> [guardrails\_log\_sink](#module\_guardrails\_log\_sink) | github.com/XBankGCPOrg/gcp-lz-modules//log_sink | 35e1ac51b81725fb3378b83f10f3cae9b2956e78 |
-| <a name="module_guardrails_pubsub_log_topic"></a> [guardrails\_pubsub\_log\_topic](#module\_guardrails\_pubsub\_log\_topic) | github.com/XBankGCPOrg/gcp-lz-modules//pubsub/topic | 35e1ac51b81725fb3378b83f10f3cae9b2956e78 |
-| <a name="module_guardrails_service_identity"></a> [guardrails\_service\_identity](#module\_guardrails\_service\_identity) | github.com/XBankGCPOrg/gcp-lz-modules//resources/service_identity | 35e1ac51b81725fb3378b83f10f3cae9b2956e78 |
-| <a name="module_guardrails_storage"></a> [guardrails\_storage](#module\_guardrails\_storage) | github.com/XBankGCPOrg/gcp-lz-modules//storage/bucket | 35e1ac51b81725fb3378b83f10f3cae9b2956e78 |
-| <a name="module_log_bigquery"></a> [log\_bigquery](#module\_log\_bigquery) | github.com/XBankGCPOrg/gcp-lz-modules//bigquery/dataset | 35e1ac51b81725fb3378b83f10f3cae9b2956e78 |
-| <a name="module_log_pubsub_topic"></a> [log\_pubsub\_topic](#module\_log\_pubsub\_topic) | github.com/XBankGCPOrg/gcp-lz-modules//pubsub/topic | 738dab50279ee428b29ce56077b4b7f6b6dd9077 |
-| <a name="module_log_sink_all_to_storage"></a> [log\_sink\_all\_to\_storage](#module\_log\_sink\_all\_to\_storage) | github.com/XBankGCPOrg/gcp-lz-modules//log_sink | 35e1ac51b81725fb3378b83f10f3cae9b2956e78 |
-| <a name="module_log_sink_filtered_to_bigquery"></a> [log\_sink\_filtered\_to\_bigquery](#module\_log\_sink\_filtered\_to\_bigquery) | github.com/XBankGCPOrg/gcp-lz-modules//log_sink | 35e1ac51b81725fb3378b83f10f3cae9b2956e78 |
-| <a name="module_log_sink_filtered_to_pubsub"></a> [log\_sink\_filtered\_to\_pubsub](#module\_log\_sink\_filtered\_to\_pubsub) | github.com/XBankGCPOrg/gcp-lz-modules//log_sink | 35e1ac51b81725fb3378b83f10f3cae9b2956e78 |
-| <a name="module_log_storage"></a> [log\_storage](#module\_log\_storage) | github.com/XBankGCPOrg/gcp-lz-modules//storage/bucket | 35e1ac51b81725fb3378b83f10f3cae9b2956e78 |
-| <a name="module_logging_kms_key"></a> [logging\_kms\_key](#module\_logging\_kms\_key) | github.com/XBankGCPOrg/gcp-lz-modules//kms/key | 35e1ac51b81725fb3378b83f10f3cae9b2956e78 |
-| <a name="module_logging_service_identity"></a> [logging\_service\_identity](#module\_logging\_service\_identity) | github.com/XBankGCPOrg/gcp-lz-modules//resources/service_identity | 35e1ac51b81725fb3378b83f10f3cae9b2956e78 |
-| <a name="module_logging_service_identity_for_bigquerry"></a> [logging\_service\_identity\_for\_bigquerry](#module\_logging\_service\_identity\_for\_bigquerry) | github.com/XBankGCPOrg/gcp-lz-modules//resources/service_identity | 35e1ac51b81725fb3378b83f10f3cae9b2956e78 |
-| <a name="module_monitoring"></a> [monitoring](#module\_monitoring) | github.com/XBankGCPOrg/gcp-lz-modules//monitoring/ | e970493d5d7619a1c3c9bee50c1c0e8785f293ac |
-| <a name="module_organization"></a> [organization](#module\_organization) | github.com/XBankGCPOrg/gcp-lz-modules//resources/organization | 35e1ac51b81725fb3378b83f10f3cae9b2956e78 |
-| <a name="module_organization_policy"></a> [organization\_policy](#module\_organization\_policy) | github.com/XBankGCPOrg/gcp-lz-modules//iam/org_policy | 35e1ac51b81725fb3378b83f10f3cae9b2956e78 |
-| <a name="module_pricing_dataset"></a> [pricing\_dataset](#module\_pricing\_dataset) | github.com/XBankGCPOrg/gcp-lz-modules//bigquery/dataset | 35e1ac51b81725fb3378b83f10f3cae9b2956e78 |
-| <a name="module_project_policy"></a> [project\_policy](#module\_project\_policy) | github.com/XBankGCPOrg/gcp-lz-modules//iam/org_policy | 35e1ac51b81725fb3378b83f10f3cae9b2956e78 |
-| <a name="module_projects"></a> [projects](#module\_projects) | github.com/XBankGCPOrg/gcp-lz-modules//resources/project | 35e1ac51b81725fb3378b83f10f3cae9b2956e78 |
-| <a name="module_service_account"></a> [service\_account](#module\_service\_account) | github.com/XBankGCPOrg/gcp-lz-modules//iam/service_account | 35e1ac51b81725fb3378b83f10f3cae9b2956e78 |
-| <a name="module_service_accounts"></a> [service\_accounts](#module\_service\_accounts) | github.com/XBankGCPOrg/gcp-lz-modules//iam/service_account | 35e1ac51b81725fb3378b83f10f3cae9b2956e78 |
-| <a name="module_service_identity"></a> [service\_identity](#module\_service\_identity) | github.com/XBankGCPOrg/gcp-lz-modules//resources/service_identity | 35e1ac51b81725fb3378b83f10f3cae9b2956e78 |
+| <a name="module_billing_dataset"></a> [billing\_dataset](#module\_billing\_dataset) | github.com/XBankGCPOrg/gcp-lz-modules//bigquery/dataset | v2 |
+| <a name="module_billing_details_dataset"></a> [billing\_details\_dataset](#module\_billing\_details\_dataset) | github.com/XBankGCPOrg/gcp-lz-modules//bigquery/dataset | v2 |
+| <a name="module_budget"></a> [budget](#module\_budget) | github.com/XBankGCPOrg/gcp-lz-modules//budget/ | v2 |
+| <a name="module_folder_policy"></a> [folder\_policy](#module\_folder\_policy) | github.com/XBankGCPOrg/gcp-lz-modules//iam/org_policy | v2 |
+| <a name="module_folders"></a> [folders](#module\_folders) | github.com/XBankGCPOrg/gcp-lz-modules//resources/multi_level_folder | v2 |
+| <a name="module_guardrail_pubsub_topic_alerts"></a> [guardrail\_pubsub\_topic\_alerts](#module\_guardrail\_pubsub\_topic\_alerts) | github.com/XBankGCPOrg/gcp-lz-modules//pubsub/topic | v2 |
+| <a name="module_guardrails_artifact_registry"></a> [guardrails\_artifact\_registry](#module\_guardrails\_artifact\_registry) | github.com/XBankGCPOrg/gcp-lz-modules//devops/artifact_registry | v2 |
+| <a name="module_guardrails_cloudfunction"></a> [guardrails\_cloudfunction](#module\_guardrails\_cloudfunction) | github.com/XBankGCPOrg/gcp-lz-modules//compute/cloudfunction | v2 |
+| <a name="module_guardrails_kms_key"></a> [guardrails\_kms\_key](#module\_guardrails\_kms\_key) | github.com/XBankGCPOrg/gcp-lz-modules//kms/key | v2 |
+| <a name="module_guardrails_log_sink"></a> [guardrails\_log\_sink](#module\_guardrails\_log\_sink) | github.com/XBankGCPOrg/gcp-lz-modules//log_sink | v2 |
+| <a name="module_guardrails_pubsub_log_topic"></a> [guardrails\_pubsub\_log\_topic](#module\_guardrails\_pubsub\_log\_topic) | github.com/XBankGCPOrg/gcp-lz-modules//pubsub/topic | v2 |
+| <a name="module_guardrails_service_identity"></a> [guardrails\_service\_identity](#module\_guardrails\_service\_identity) | github.com/XBankGCPOrg/gcp-lz-modules//resources/service_identity | v2 |
+| <a name="module_guardrails_storage"></a> [guardrails\_storage](#module\_guardrails\_storage) | github.com/XBankGCPOrg/gcp-lz-modules//storage/bucket | v2 |
+| <a name="module_log_bigquery"></a> [log\_bigquery](#module\_log\_bigquery) | github.com/XBankGCPOrg/gcp-lz-modules//bigquery/dataset | v2 |
+| <a name="module_log_pubsub_topic"></a> [log\_pubsub\_topic](#module\_log\_pubsub\_topic) | github.com/XBankGCPOrg/gcp-lz-modules//pubsub/topic | v2 |
+| <a name="module_log_sink_all_to_storage"></a> [log\_sink\_all\_to\_storage](#module\_log\_sink\_all\_to\_storage) | github.com/XBankGCPOrg/gcp-lz-modules//log_sink | v2 |
+| <a name="module_log_sink_filtered_to_bigquery"></a> [log\_sink\_filtered\_to\_bigquery](#module\_log\_sink\_filtered\_to\_bigquery) | github.com/XBankGCPOrg/gcp-lz-modules//log_sink | v2 |
+| <a name="module_log_sink_filtered_to_pubsub"></a> [log\_sink\_filtered\_to\_pubsub](#module\_log\_sink\_filtered\_to\_pubsub) | github.com/XBankGCPOrg/gcp-lz-modules//log_sink | v2 |
+| <a name="module_log_storage"></a> [log\_storage](#module\_log\_storage) | github.com/XBankGCPOrg/gcp-lz-modules//storage/bucket | v2 |
+| <a name="module_logging_kms_key"></a> [logging\_kms\_key](#module\_logging\_kms\_key) | github.com/XBankGCPOrg/gcp-lz-modules//kms/key | v2 |
+| <a name="module_logging_service_identity"></a> [logging\_service\_identity](#module\_logging\_service\_identity) | github.com/XBankGCPOrg/gcp-lz-modules//resources/service_identity | v2 |
+| <a name="module_logging_service_identity_for_bigquerry"></a> [logging\_service\_identity\_for\_bigquerry](#module\_logging\_service\_identity\_for\_bigquerry) | github.com/XBankGCPOrg/gcp-lz-modules//resources/service_identity | v2 |
+| <a name="module_monitoring"></a> [monitoring](#module\_monitoring) | github.com/XBankGCPOrg/gcp-lz-modules//monitoring/ | v2 |
+| <a name="module_organization"></a> [organization](#module\_organization) | github.com/XBankGCPOrg/gcp-lz-modules//resources/organization | v2 |
+| <a name="module_organization_policy"></a> [organization\_policy](#module\_organization\_policy) | github.com/XBankGCPOrg/gcp-lz-modules//iam/org_policy | v2 |
+| <a name="module_pricing_dataset"></a> [pricing\_dataset](#module\_pricing\_dataset) | github.com/XBankGCPOrg/gcp-lz-modules//bigquery/dataset | v2 |
+| <a name="module_project_policy"></a> [project\_policy](#module\_project\_policy) | github.com/XBankGCPOrg/gcp-lz-modules//iam/org_policy | v2 |
+| <a name="module_projects"></a> [projects](#module\_projects) | github.com/XBankGCPOrg/gcp-lz-modules//resources/project | v2 |
+| <a name="module_service_account"></a> [service\_account](#module\_service\_account) | github.com/XBankGCPOrg/gcp-lz-modules//iam/service_account | v2 |
+| <a name="module_service_accounts"></a> [service\_accounts](#module\_service\_accounts) | github.com/XBankGCPOrg/gcp-lz-modules//iam/service_account | v2 |
+| <a name="module_service_identity"></a> [service\_identity](#module\_service\_identity) | github.com/XBankGCPOrg/gcp-lz-modules//resources/service_identity | v2 |
 
 ## Resources
 

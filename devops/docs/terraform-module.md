@@ -21,12 +21,12 @@
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_control_kms_key"></a> [control\_kms\_key](#module\_control\_kms\_key) | github.com/XBankGCPOrg/gcp-lz-modules//kms/key | 35e1ac51b81725fb3378b83f10f3cae9b2956e78 |
-| <a name="module_folders"></a> [folders](#module\_folders) | github.com/XBankGCPOrg/gcp-lz-modules//resources/folder | 35e1ac51b81725fb3378b83f10f3cae9b2956e78 |
-| <a name="module_individual_state_files"></a> [individual\_state\_files](#module\_individual\_state\_files) | github.com/XBankGCPOrg/gcp-lz-modules//storage/bucket | 35e1ac51b81725fb3378b83f10f3cae9b2956e78 |
-| <a name="module_organization"></a> [organization](#module\_organization) | github.com/XBankGCPOrg/gcp-lz-modules//resources/organization | 35e1ac51b81725fb3378b83f10f3cae9b2956e78 |
-| <a name="module_projects"></a> [projects](#module\_projects) | github.com/XBankGCPOrg/gcp-lz-modules//resources/project | 35e1ac51b81725fb3378b83f10f3cae9b2956e78 |
-| <a name="module_service_account"></a> [service\_account](#module\_service\_account) | github.com/XBankGCPOrg/gcp-lz-modules//iam/service_account | 35e1ac51b81725fb3378b83f10f3cae9b2956e78 |
+| <a name="module_control_kms_key"></a> [control\_kms\_key](#module\_control\_kms\_key) | github.com/XBankGCPOrg/gcp-lz-modules//kms/key | v2 |
+| <a name="module_folders"></a> [folders](#module\_folders) | github.com/XBankGCPOrg/gcp-lz-modules//resources/folder | v2 |
+| <a name="module_individual_state_files"></a> [individual\_state\_files](#module\_individual\_state\_files) | github.com/XBankGCPOrg/gcp-lz-modules//storage/bucket | v2 |
+| <a name="module_organization"></a> [organization](#module\_organization) | github.com/XBankGCPOrg/gcp-lz-modules//resources/organization | v2 |
+| <a name="module_projects"></a> [projects](#module\_projects) | github.com/XBankGCPOrg/gcp-lz-modules//resources/project | v2 |
+| <a name="module_service_account"></a> [service\_account](#module\_service\_account) | github.com/XBankGCPOrg/gcp-lz-modules//iam/service_account | v2 |
 
 ## Resources
 

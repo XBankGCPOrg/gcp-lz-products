@@ -17,13 +17,13 @@ No providers.
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_createsubnets"></a> [createsubnets](#module\_createsubnets) | github.com/XBankGCPOrg/gcp-lz-modules//network/subnets | ee40d09c17602a4f1b975a790af0da0ffc46b42a |
-| <a name="module_createvpcs"></a> [createvpcs](#module\_createvpcs) | github.com/XBankGCPOrg/gcp-lz-modules//network/vpc | e8e789c54e00c1dfae6fb8279dffeb0c735b13ae |
-| <a name="module_firewall-rules"></a> [firewall-rules](#module\_firewall-rules) | github.com/XBankGCPOrg/gcp-lz-modules//network/firewall-rules | eea0af420e9c8f713d7ac995473fa86f72cd7f6f |
-| <a name="module_interconnect-attachment"></a> [interconnect-attachment](#module\_interconnect-attachment) | github.com/XBankGCPOrg/gcp-lz-modules//network/interconnect-attachment | 1f050da874728c67789c8a99478ff39bcf6086e0 |
-| <a name="module_ip"></a> [ip](#module\_ip) | github.com/XBankGCPOrg/gcp-lz-modules//network/ip-address | cc5c438ed597cec2a91ecb7f3521fe28b54a0a56 |
-| <a name="module_router"></a> [router](#module\_router) | github.com/XBankGCPOrg/gcp-lz-modules//network/router | 1f050da874728c67789c8a99478ff39bcf6086e0 |
-| <a name="module_svc-net-peer"></a> [svc-net-peer](#module\_svc-net-peer) | github.com/XBankGCPOrg/gcp-lz-modules//network/service-networking | cc5c438ed597cec2a91ecb7f3521fe28b54a0a56 |
+| <a name="module_createsubnets"></a> [createsubnets](#module\_createsubnets) | github.com/XBankGCPOrg/gcp-lz-modules//network/subnets | v2 |
+| <a name="module_createvpcs"></a> [createvpcs](#module\_createvpcs) | github.com/XBankGCPOrg/gcp-lz-modules//network/vpc | v2 |
+| <a name="module_firewall-rules"></a> [firewall-rules](#module\_firewall-rules) | github.com/XBankGCPOrg/gcp-lz-modules//network/firewall-rules | v2 |
+| <a name="module_interconnect-attachment"></a> [interconnect-attachment](#module\_interconnect-attachment) | github.com/XBankGCPOrg/gcp-lz-modules//network/interconnect-attachment | v2 |
+| <a name="module_ip"></a> [ip](#module\_ip) | github.com/XBankGCPOrg/gcp-lz-modules//network/ip-address | v2 |
+| <a name="module_router"></a> [router](#module\_router) | github.com/XBankGCPOrg/gcp-lz-modules//network/router | v2 |
+| <a name="module_svc-net-peer"></a> [svc-net-peer](#module\_svc-net-peer) | github.com/XBankGCPOrg/gcp-lz-modules//network/service-networking | v2 |
 
 ## Resources
 

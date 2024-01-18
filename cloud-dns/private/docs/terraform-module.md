@@ -17,7 +17,7 @@ No providers.
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_cloud-dns"></a> [cloud-dns](#module\_cloud-dns) | github.com/XBankGCPOrg/gcp-lz-modules//cloud-dns/private | 3c3f7bdc7abda582fd6fa025fa987ef618d103eb |
+| <a name="module_cloud-dns"></a> [cloud-dns](#module\_cloud-dns) | github.com/XBankGCPOrg/gcp-lz-modules//cloud-dns/private | v2 |
 
 ## Resources
 

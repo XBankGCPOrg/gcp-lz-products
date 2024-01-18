@@ -17,7 +17,7 @@ No providers.
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_gke-standard"></a> [gke-standard](#module\_gke-standard) | github.com/XBankGCPOrg/gcp-lz-modules//gke/gke-standard | 1760227d2489552b4d599ea459fd73987b834c60 |
+| <a name="module_gke-standard"></a> [gke-standard](#module\_gke-standard) | github.com/XBankGCPOrg/gcp-lz-modules//gke/gke-standard | v2 |
 
 ## Resources
 

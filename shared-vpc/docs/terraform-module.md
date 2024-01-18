@@ -16,7 +16,7 @@ No providers.
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_shared-VPC"></a> [shared-VPC](#module\_shared-VPC) | github.com/XBankGCPOrg/gcp-lz-modules//shared_vpc | 90d324ad0f7d258bbc36176ec86b7157e2ae2aa9 |
+| <a name="module_shared-VPC"></a> [shared-VPC](#module\_shared-VPC) | github.com/XBankGCPOrg/gcp-lz-modules//shared_vpc | v2 |
 
 ## Resources
 
@@ -26,7 +26,7 @@ No resources.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_shared_vpc"></a> [shared\_vpc](#input\_shared\_vpc) | n/a | <pre>list(object({<br>    project         = string<br>    service_project = string<br>    service_account = string<br>    subnet          = string<br>  }))</pre> | n/a | yes |
+| <a name="input_shared_vpc"></a> [shared\_vpc](#input\_shared\_vpc) | n/a | <pre>list(object({<br>    host_project    = string<br>    service_project = string<br>    service_account = string<br>    subnet          = list(string)<br>  }))</pre> | n/a | yes |
 
 ## Outputs
 

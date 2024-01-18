@@ -21,8 +21,8 @@
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_artifact_registry"></a> [artifact\_registry](#module\_artifact\_registry) | github.com/XBankGCPOrg/gcp-lz-modules//devops/artifact_registry | 35e1ac51b81725fb3378b83f10f3cae9b2956e78 |
-| <a name="module_centralized_kms"></a> [centralized\_kms](#module\_centralized\_kms) | github.com/XBankGCPOrg/gcp-lz-modules//kms/key | 35e1ac51b81725fb3378b83f10f3cae9b2956e78 |
+| <a name="module_artifact_registry"></a> [artifact\_registry](#module\_artifact\_registry) | github.com/XBankGCPOrg/gcp-lz-modules//devops/artifact_registry | v2 |
+| <a name="module_centralized_kms"></a> [centralized\_kms](#module\_centralized\_kms) | github.com/XBankGCPOrg/gcp-lz-modules//kms/key | v2 |
 
 ## Resources
 

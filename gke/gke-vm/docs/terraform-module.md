@@ -17,7 +17,7 @@ No providers.
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_vm"></a> [vm](#module\_vm) | github.com/XBankGCPOrg/gcp-lz-modules//vm | 32980bd2b869f6688c37501525bedb28d1a7e0ef |
+| <a name="module_vm"></a> [vm](#module\_vm) | github.com/XBankGCPOrg/gcp-lz-modules//vm | v2 |
 
 ## Resources
 

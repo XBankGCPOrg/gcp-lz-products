@@ -17,7 +17,7 @@ No providers.
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_vm"></a> [vm](#module\_vm) | github.com/XBankGCPOrg/gcp-lz-modules//vm-windows | 4f4035865c73d5a5d247877b0fa3e6c3d65964eb |
+| <a name="module_vm"></a> [vm](#module\_vm) | github.com/XBankGCPOrg/gcp-lz-modules//vm-windows | v2 |
 
 ## Resources
 
