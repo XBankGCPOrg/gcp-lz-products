@@ -3,6 +3,6 @@ variable "shared_vpc" {
     project         = string
     service_project = string
     service_account = string
-    subnet          = string
+    subnet          = list(string)
   }))
 }
